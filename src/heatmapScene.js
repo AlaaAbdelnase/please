@@ -1440,7 +1440,7 @@ export default class HeatmapScene extends Phaser.Scene {
       z-index: 5;
     `;
     instruction.textContent =
-      "🖱️ Hover over the map and click the red markers for details";
+      "🖱 Hover over the map and click the red markers for details";
     mapContainer.appendChild(instruction);
 
     // Create the interactive map
