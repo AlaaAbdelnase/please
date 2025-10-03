@@ -56,7 +56,6 @@ class exploreScene extends Phaser.Scene {
 
     this.createTitle();
 
-
     // Create 3x2 grid of scene boxes (centered) - bigger size
     const boxWidth = 160;
     const boxHeight = 200;
@@ -67,7 +66,7 @@ class exploreScene extends Phaser.Scene {
     const totalWidth = 2 * boxWidth;
     const totalHeight = boxHeight;
     const startX = (this.scale.width - totalWidth) / 4;
-    const startY = (this.scale.height - totalHeight) / 4 ;
+    const startY = (this.scale.height - totalHeight) / 4;
 
     const scenes = [
       {
@@ -136,10 +135,8 @@ class exploreScene extends Phaser.Scene {
   }
 
   createSceneBox(x, y, sceneData, width, height) {
-
-
     // Create main box
-    const box = this.add.rectangle(x, y, width+100, height, 0x3d2f1f);
+    const box = this.add.rectangle(x, y, width + 100, height, 0x3d2f1f);
     box.setStrokeStyle(3, 0x8b4513);
     box.setInteractive();
     box.setData("sceneData", sceneData);
@@ -173,8 +170,6 @@ class exploreScene extends Phaser.Scene {
       );
     }
 
-    
-
     // Add pixelated rendering
     sceneImage.setData("originalTexture", sceneData.icon);
     sceneImage.setData("animKey", sceneData.animKey);
@@ -200,7 +195,7 @@ class exploreScene extends Phaser.Scene {
         scaleX: 1.05,
         scaleY: 1.05,
         duration: 200,
-        ease: "Sine.easeInOut"
+        ease: "Sine.easeInOut",
       });
 
       // Start video on hover (for all scenes with videos)
@@ -277,7 +272,7 @@ class exploreScene extends Phaser.Scene {
         scaleX: 1,
         scaleY: 1,
         duration: 200,
-         ease: "Sine.easeInOut"
+        ease: "Sine.easeInOut",
       });
 
       // Stop video and switch back to static image
@@ -297,17 +292,17 @@ class exploreScene extends Phaser.Scene {
     });
 
     // Click handler - all scenes always available
- 
-box.on("pointerdown", () => {
-  const sceneData = box.getData("sceneData");
-  console.log(`Clicked on scene: ${sceneData.name}`);
 
-  if (sceneData.scene) {
-    this.scene.stop('scene-intro');     // Stop intro
-    this.scene.stop('exploreScene');    // Stop explore scene too!
-    this.scene.start(sceneData.scene);  // Start the game scene
-  }
-});
+    box.on("pointerdown", () => {
+      const sceneData = box.getData("sceneData");
+      console.log(`Clicked on scene: ${sceneData.name}`);
+
+      if (sceneData.scene) {
+        this.scene.stop("scene-intro"); // Stop intro
+        this.scene.stop("exploreScene"); // Stop explore scene too!
+        this.scene.start(sceneData.scene); // Start the game scene
+      }
+    });
 
     // Store reference
     this.sceneBoxes.push({
@@ -325,35 +320,48 @@ box.on("pointerdown", () => {
     console.log(`Completed scene: ${sceneKey}`);
   }
 
-   createTitle() {
+  createTitle() {
     const width = this.sys.game.config.width;
 
-    const titleBg = this.add.rectangle(width / 2, 40, width - 60, 60, 0x0f3d0f, 0.9);
+    const titleBg = this.add.rectangle(
+      width / 2,
+      40,
+      width - 60,
+      60,
+      0x0f3d0f,
+      0.9
+    );
     titleBg.setStrokeStyle(4, 0x00ff00);
     titleBg.setDepth(15);
 
-    this.titleText = this.add.text(width / 2, 40, 'CRISIS SCENARIOS', {
-      fontSize: '24px',
-      fontFamily: "'Press Start 2P', Courier New",
-      color: '#00ff00',
-      fontStyle: 'bold'
-    }).setOrigin(0.5).setDepth(15);
+    this.titleText = this.add
+      .text(width / 2, 40, "CRISIS SCENARIOS", {
+        fontSize: "24px",
+        fontFamily: "'Press Start 2P', Courier New",
+        color: "#00ff00",
+        fontStyle: "bold",
+      })
+      .setOrigin(0.5)
+      .setDepth(15);
 
-    const subtitle = this.add.text(width / 2, 62, 'A Learning Adventure', {
-      fontSize: '10px',
-      fontFamily: 'Courier New',
-      color: '#88ff88',
-      fontStyle: 'italic'
-    }).setOrigin(0.5).setDepth(15);
+    const subtitle = this.add
+      .text(width / 2, 62, "A Learning Adventure", {
+        fontSize: "10px",
+        fontFamily: "Courier New",
+        color: "#88ff88",
+        fontStyle: "italic",
+      })
+      .setOrigin(0.5)
+      .setDepth(15);
 
     // Title animation
     this.tweens.add({
       targets: [titleBg, this.titleText, subtitle],
-      y: '+=2',
+      y: "+=2",
       duration: 2000,
       yoyo: true,
       repeat: -1,
-      ease: 'Sine.inOut'
+      ease: "Sine.inOut",
     });
 
     // Decorative elements
@@ -381,7 +389,7 @@ box.on("pointerdown", () => {
       duration: 1500,
       yoyo: true,
       repeat: -1,
-      ease: 'Sine.inOut'
+      ease: "Sine.inOut",
     });
   }
 

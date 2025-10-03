@@ -1,12 +1,16 @@
-import Phaser from 'phaser';
-import {GameScene} from './floodintro.js';
-import introScene from './intro.js';
-import exploreScene from './explore.js';
-import FloodScene from './floodGame.js';
-import Level1Scene from './level1flood.js';
-import Level2Scene from './level2flood.js';
+import Phaser from "phaser";
+import { GameScene } from "./floodintro.js";
+import introScene from "./intro.js";
+import exploreScene from "./explore.js";
+import FloodScene from "./floodGame.js";
+import Level1Scene from "./level1flood.js";
+import Level2Scene from "./level2flood.js";
+import HeatmapScene from "./heatmapScene.js";
+import heatGameScene from "./heatGame.js";
+import WaterScene from "./waterScene.js";
+import waterGame from "./waterGame.js";
 
-const gameCanvas = document.getElementById('gameCanvas');
+const gameCanvas = document.getElementById("gameCanvas");
 const sizes = {
   width: window.innerWidth,
   height: window.innerHeight,
@@ -17,22 +21,33 @@ const config = {
   width: sizes.width,
   height: sizes.height,
   canvas: gameCanvas,
-   clearBeforeRender: true,
-  backgroundColor: '#0f0f23',
-   input: {
+  clearBeforeRender: true,
+  backgroundColor: "#0f0f23",
+  input: {
     keyboard: true,
     mouse: true,
-    touch: true
+    touch: true,
   },
   physics: {
-    default: 'arcade',
+    default: "arcade",
     arcade: {
       gravity: { y: 0 },
-      debug: false
-    }
+      debug: false,
+    },
   },
-  scene: [introScene, exploreScene,GameScene,FloodScene, Level1Scene, Level2Scene],
-  pixelArt: true
-}
+  scene: [
+    introScene,
+    exploreScene,
+    GameScene,
+    FloodScene,
+    Level1Scene,
+    Level2Scene,
+    HeatmapScene,
+    heatGameScene,
+    WaterScene,
+    waterGame,
+  ],
+  pixelArt: true,
+};
 
 const game = new Phaser.Game(config);

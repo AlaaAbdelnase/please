@@ -1,44 +1,67 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
+      rel="stylesheet"
+    />
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>farminggame</title>
-       <style>
-        body {
-            margin: 0;
-            padding: 0;
-            background: #000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            overflow: hidden;
-        }
-        canvas {
-            display: block;
-            margin: 0 auto;
-            cursor: pointer; /* Shows it's clickable */
-        }
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        background: #000;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        overflow: hidden;
+      }
+      canvas {
+        display: block;
+        margin: 0 auto;
+        cursor: pointer; /* Shows it's clickable */
+      }
     </style>
   </head>
   <body>
-  <div id="uiOverlay" style="display:none;">
-  <h2 id="questionTitle"></h2>
-  <ul id="answersList"></ul>
-  <div id="feedback"></div>
+    <main>
+      <section id="uiOverlay" class="ui-overlay" style="display: none">
+        <div class="ui-card">
+          <img
+            src="/assets/alaa's/farmer.png"
+            alt="Farmer"
+            class="farmer-icon"
+          />
+          <h1 id="questionTitle" class="ui-title">
+            India 2021 - April Heatwave Crisis!
+          </h1>
 
+          <ul id="answersList" class="answers-list"></ul>
 
-  <button id="tryAgainBtn">Try Again</button>
-  <button id="nextBtn">Next</button>
-</div>
+          <p id="questionSubtitle" class="ui-subtitle">
+            Which method is BEST to keep soil cool and conserve moisture?
+          </p>
 
+          <div id="feedback" class="feedback" hidden></div>
 
+          <div class="controls">
+            <button id="tryAgainBtn" class="btn btn-danger" hidden>
+              Try Again
+            </button>
+            <button id="nextBtn" class="btn btn-success" hidden>
+              Continue to Next Level
+            </button>
+          </div>
+        </div>
+      </section>
+    </main>
 
-     <canvas id="gameCanvas"></canvas>
+    <canvas id="gameCanvas"></canvas>
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>
