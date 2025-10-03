@@ -17,8 +17,25 @@ export default class HeatmapScene extends Phaser.Scene {
     // Load your global heatmap
     this.load.image("heatmap", "/assets/alaa's/heatmap.png");
 
-    // Load farmer image
-    this.load.image("farmer", "/assets/alaa's/farmer.png");
+    // Load farmer image - use regular farmer for now since indian_farmer.png has issues
+    this.load.image("farmer", "/assets/indian_farmer.png");
+    this.load.image("indian_farmer", "/assets/indian_farmer.png");
+
+    // Load click sound
+    this.load.audio("clickSound", "/assets/click.mp3");
+
+    // Load wrong and right soundtrack sounds
+    this.load.audio("wrongSound", "/assets/wrong_soundtrack.mp3");
+    this.load.audio("rightSound", "/assets/right-soundtrack.mp3");
+
+    // Debug loading
+    this.load.on("filecomplete-image-indian_farmer", () => {
+      console.log("✅ Indian farmer loaded successfully");
+    });
+
+    this.load.on("loaderror", (file) => {
+      console.error("❌ Failed to load:", file.key, "from path:", file.url);
+    });
 
     // Load world map base (you might need to add this)
     // this.load.image("worldmap", "/assets/world_map.png");
@@ -41,6 +58,13 @@ export default class HeatmapScene extends Phaser.Scene {
 
   create() {
     console.log("HeatmapScene create() called");
+
+    // Initialize click sound
+    this.clickSound = this.sound.add("clickSound", { volume: 0.3 });
+
+    // Initialize wrong and right soundtrack sounds
+    this.wrongSound = this.sound.add("wrongSound", { volume: 0.4 });
+    this.rightSound = this.sound.add("rightSound", { volume: 0.4 });
 
     // Hide the main UI overlay completely
     const ui = document.getElementById("uiOverlay");
@@ -215,6 +239,7 @@ export default class HeatmapScene extends Phaser.Scene {
       // Make heatmap interactive to open full-screen map
       heatmap.setInteractive();
       heatmap.on("pointerdown", () => {
+        this.clickSound.play();
         this.openFullScreenMap();
       });
     } else {
@@ -228,6 +253,7 @@ export default class HeatmapScene extends Phaser.Scene {
       );
       heatmap.setInteractive();
       heatmap.on("pointerdown", () => {
+        this.clickSound.play();
         this.openFullScreenMap();
       });
     }
@@ -336,6 +362,7 @@ export default class HeatmapScene extends Phaser.Scene {
     video1.setInteractive();
     video1.on("pointerdown", () => {
       console.log("🎬 Video1 (mulching) clicked!");
+      this.clickSound.play();
       this.playVideo("mulching");
     });
     video1.on("pointerover", () => {
@@ -386,6 +413,7 @@ export default class HeatmapScene extends Phaser.Scene {
     video2.setInteractive();
     video2.on("pointerdown", () => {
       console.log("🎬 Video2 (drip) clicked!");
+      this.clickSound.play();
       this.playVideo("drip");
     });
     video2.on("pointerover", () => {
@@ -436,6 +464,7 @@ export default class HeatmapScene extends Phaser.Scene {
     video3.setInteractive();
     video3.on("pointerdown", () => {
       console.log("🎬 Video3 (shadenet) clicked!");
+      this.clickSound.play();
       this.playVideo("shadenet");
     });
     video3.on("pointerover", () => {
@@ -523,6 +552,22 @@ export default class HeatmapScene extends Phaser.Scene {
   createStoryText() {
     const { width, height } = this.scale;
 
+    // Add Indian farmer image over the dialogue to the left
+    const indianFarmer = this.add
+      .image(width / 2 - 350, height - 80, "indian_farmer")
+      .setScale(0.17)
+      .setDepth(15);
+
+    // Add breathing animation to Indian farmer
+    this.tweens.add({
+      targets: indianFarmer,
+      scaleX: 0.19,
+      scaleY: 0.19,
+      duration: 1500,
+      yoyo: true,
+      repeat: -1,
+    });
+
     // Story background box
     const storyBg = this.add.rectangle(
       width / 2,
@@ -534,10 +579,8 @@ export default class HeatmapScene extends Phaser.Scene {
     storyBg.setStrokeStyle(3, 0xffd700);
 
     const storyText =
-      "CRISIS: Extreme heat is destroying farmland worldwide...\n\n" +
-      "IMPACT: Crops fail, farmers suffer, food security collapses...\n\n" +
-      "MISSION: Explore solutions to save global agriculture!";
-
+      "Hi I am Ramesh, you arrive at the right time here in India! \n\n" +
+      "CRISIS: Extreme heat is destroying farmland worldwide...\n\n";
     this.typewriteText(width / 2, height - 80, storyText, () => {
       this.createExploreButton();
     });
@@ -582,6 +625,7 @@ export default class HeatmapScene extends Phaser.Scene {
 
     // Click effect
     buttonContainer.on("pointerdown", () => {
+      this.clickSound.play();
       // Restore the main UI before transitioning
       const ui = document.getElementById("uiOverlay");
       if (ui) {
@@ -607,7 +651,7 @@ export default class HeatmapScene extends Phaser.Scene {
   typewriteText(x, y, text, onComplete) {
     const content = this.add
       .text(x, y, "", {
-        fontSize: "14px",
+        fontSize: "18px",
         fontFamily: "Courier New",
         color: "#ffd700",
         align: "center",
@@ -720,14 +764,17 @@ export default class HeatmapScene extends Phaser.Scene {
 
     zoomIn.addEventListener("click", () => {
       console.log("🔍+ Zoom In button clicked!");
+      this.clickSound.play();
       this.zoomIn();
     });
     zoomOut.addEventListener("click", () => {
       console.log("🔍- Zoom Out button clicked!");
+      this.clickSound.play();
       this.zoomOut();
     });
     resetView.addEventListener("click", () => {
       console.log("🎯 Reset View button clicked!");
+      this.clickSound.play();
       this.resetView();
     });
 
@@ -758,6 +805,7 @@ export default class HeatmapScene extends Phaser.Scene {
     moreInfoBtn.textContent = "🔍 Check Your Info";
     moreInfoBtn.addEventListener("click", () => {
       console.log("🔍 Check Your Info button clicked!");
+      this.clickSound.play();
 
       // Restore the main UI before transitioning
       const ui = document.getElementById("uiOverlay");
@@ -1584,6 +1632,7 @@ export default class HeatmapScene extends Phaser.Scene {
 
       // Click to show details
       marker.addEventListener("click", () => {
+        this.clickSound.play();
         this.showHotspotDetails(hotspot);
       });
     });
@@ -1720,7 +1769,8 @@ export default class HeatmapScene extends Phaser.Scene {
 
     // Click handler
     backBtn.on("pointerdown", () => {
-      this.scene.start("MainScene");
+      this.clickSound.play();
+      this.scene.start("exploreScene");
     });
   }
 

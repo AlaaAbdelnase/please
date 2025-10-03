@@ -13,9 +13,9 @@ export default class WaterGame extends Phaser.Scene {
     ];
     this.secondRowOrder = [1, 2, 0]; // Fixed pattern for 3 images
     this.images = [
-      { key: "mulching", name: "Mulching" },
-      { key: "breathe", name: "Breathing" },
-      { key: "over_watering", name: "Over Watering" },
+      { key: "lvl1", name: "CO2, Level 1 Adaptation" },
+      { key: "lvl2", name: "CO2, Level 2 Adaptation" },
+      { key: "nothing", name: "No CO2, No Adaptation" },
     ];
     this.cropImages = [
       { key: "rice", name: "Rice" },
@@ -32,20 +32,34 @@ export default class WaterGame extends Phaser.Scene {
     );
 
     // Load first row images (situations)
-    this.load.image("mulching", "/assets/alaa's/mulching.png");
-    this.load.image("breathe", "/assets/alaa's/breathe.png");
-    this.load.image("over_watering", "/assets/alaa's/over_watering.png");
+    this.load.image("nothing", "/assets/alaa's/noco2_noadap.png");
+    this.load.image("lvl1", "/assets/alaa's/co2_lvl1.png");
+    this.load.image("lvl2", "/assets/alaa's/co2_lvl2.png");
 
     // Load second row images (crops) - using existing working images
     this.load.image("rice", "/assets/alaa's/rice.png");
     this.load.image("corn", "/assets/alaa's/corn.png");
     this.load.image("soybean", "/assets/alaa's/soybean.png");
+
+    // Load click sound
+    this.load.audio("clickSound", "/assets/click.mp3");
+
+    // Load wrong and right soundtrack sounds
+    this.load.audio("wrongSound", "/assets/wrong_soundtrack.mp3");
+    this.load.audio("rightSound", "/assets/right-soundtrack.mp3");
   }
 
   create() {
     // Set background similar to game scene
     this.cameras.main.setBackgroundColor(0x2d1810);
     this.addPixelPatches();
+
+    // Initialize click sound
+    this.clickSound = this.sound.add("clickSound", { volume: 0.3 });
+
+    // Initialize wrong and right soundtrack sounds
+    this.wrongSound = this.sound.add("wrongSound", { volume: 0.4 });
+    this.rightSound = this.sound.add("rightSound", { volume: 0.4 });
 
     // Set global instance reference
     window.waterGameInstance = this;
@@ -98,17 +112,28 @@ export default class WaterGame extends Phaser.Scene {
     // Create feedback text
     this.feedbackText = this.add
       .text(
-        this.scale.width / 2,
-        this.scale.height - 100,
-        "Select an image from the first row",
+        200, // Position much more to the left
+        200, // Position above first row initially
+        "Pick from first row",
         {
-          fontSize: "18px",
-          color: "#deb887",
+          fontSize: "20px",
+          color: "#ff4444",
           fontFamily: "Courier New",
           fontStyle: "bold",
         }
       )
       .setOrigin(0.5);
+
+    // Add breathing animation to feedback text
+    this.tweens.add({
+      targets: this.feedbackText,
+      scaleX: 1.1,
+      scaleY: 1.1,
+      duration: 1000,
+      yoyo: true,
+      repeat: -1,
+      ease: "Sine.inOut",
+    });
   }
 
   destroy() {
@@ -177,8 +202,8 @@ export default class WaterGame extends Phaser.Scene {
   createMatchingGame() {
     const centerX = this.scale.width / 3; // Move left
     const firstRowY = 300;
-    const secondRowY = 450;
-    const spacing = 150;
+    const secondRowY = 500;
+    const spacing = 250;
     const startX = centerX - spacing * 1.5;
 
     this.firstRowImages = [];
@@ -207,16 +232,22 @@ export default class WaterGame extends Phaser.Scene {
 
       // Create label
       this.add
-        .text(x, firstRowY + 70, this.images[i].name, {
-          fontSize: "12px",
+        .text(x, firstRowY + 90, this.images[i].name, {
+          fontSize: "16px",
           color: "#deb887",
           fontFamily: "Courier New",
         })
         .setOrigin(0.5);
 
       // Add click handlers
-      image.on("pointerdown", () => this.handleImageClick(i, "first"));
-      bg.on("pointerdown", () => this.handleImageClick(i, "first"));
+      image.on("pointerdown", () => {
+        this.clickSound.play();
+        this.handleImageClick(i, "first");
+      });
+      bg.on("pointerdown", () => {
+        this.clickSound.play();
+        this.handleImageClick(i, "first");
+      });
 
       // Hover effects
       image.on("pointerover", () => {
@@ -256,16 +287,22 @@ export default class WaterGame extends Phaser.Scene {
 
       // Create label
       this.add
-        .text(x, secondRowY + 80, this.cropImages[imageIndex].name, {
-          fontSize: "12px",
+        .text(x, secondRowY + 100, this.cropImages[imageIndex].name, {
+          fontSize: "16px",
           color: "#deb887",
           fontFamily: "Courier New",
         })
         .setOrigin(0.5);
 
       // Add click handlers
-      image.on("pointerdown", () => this.handleImageClick(i, "second"));
-      bg.on("pointerdown", () => this.handleImageClick(i, "second"));
+      image.on("pointerdown", () => {
+        this.clickSound.play();
+        this.handleImageClick(i, "second");
+      });
+      bg.on("pointerdown", () => {
+        this.clickSound.play();
+        this.handleImageClick(i, "second");
+      });
 
       // Hover effects
       image.on("pointerover", () => {
@@ -295,10 +332,17 @@ export default class WaterGame extends Phaser.Scene {
       this.clearSelections();
       this.firstRowImages[index].bg.setFillStyle(0x8b4513);
       this.firstRowImages[index].image.setTint(0xcd853f);
-      this.feedbackText.setText(
-        "Now click the matching image in the second row"
-      );
+
+      // Create line that follows mouse
+      this.createMouseFollowingLine(index);
+
+      // Move feedback text above second row and update message
+      this.feedbackText.setY(650); // Position above second row
+      this.feedbackText.setText("Match with ...");
     } else if (row === "second" && this.selectedFirstRow !== null) {
+      // Stop mouse following line
+      this.stopMouseFollowingLine();
+
       // Try to match with second row - check circular pattern
       const expectedMatch = this.correctMatches[this.selectedFirstRow];
 
@@ -307,6 +351,7 @@ export default class WaterGame extends Phaser.Scene {
 
       if (expectedMatch.second === index) {
         // Correct match!
+        this.rightSound.play();
         this.matches.push({ first: this.selectedFirstRow, second: index });
         this.firstRowImages[this.selectedFirstRow].bg.setFillStyle(0x228b22);
         this.secondRowImages[index].bg.setFillStyle(0x228b22);
@@ -330,13 +375,14 @@ export default class WaterGame extends Phaser.Scene {
         } else {
           this.selectedFirstRow = null;
           setTimeout(() => {
-            this.feedbackText.setText(
-              "Select another image from the first row"
-            );
+            // Move feedback text back above first row
+            this.feedbackText.setY(200);
+            this.feedbackText.setText("Pick from first row");
           }, 1500);
         }
       } else {
         // Incorrect match
+        this.wrongSound.play();
         this.feedbackText.setText("Incorrect match. Try again!");
         this.secondRowImages[index].bg.setFillStyle(0x8b0000);
         this.secondRowImages[index].image.setTint(0xff6b6b);
@@ -347,7 +393,9 @@ export default class WaterGame extends Phaser.Scene {
         setTimeout(() => {
           this.clearSelections();
           this.selectedFirstRow = null;
-          this.feedbackText.setText("Select an image from the first row");
+          // Move feedback text back above first row
+          this.feedbackText.setY(200);
+          this.feedbackText.setText("Pick from first row");
         }, 1500);
       }
     }
@@ -369,6 +417,49 @@ export default class WaterGame extends Phaser.Scene {
     this.tempLine.moveTo(firstPos.x, firstPos.y + 50);
     this.tempLine.lineTo(secondPos.x, secondPos.y - 50);
     this.tempLine.strokePath();
+  }
+
+  createMouseFollowingLine(firstIndex) {
+    // Remove any existing mouse following line
+    if (this.mouseLine) {
+      this.mouseLine.destroy();
+    }
+
+    const firstPos = this.firstRowImages[firstIndex].image;
+
+    // Create mouse following line
+    this.mouseLine = this.add.graphics();
+    this.mouseLine.lineStyle(4, 0x8b4513, 0.8);
+
+    // Store the starting position
+    this.lineStartX = firstPos.x;
+    this.lineStartY = firstPos.y + 50;
+
+    // Add pointer move event
+    this.input.on("pointermove", this.updateMouseLine, this);
+  }
+
+  updateMouseLine(pointer) {
+    if (!this.mouseLine) return;
+
+    // Clear and redraw the line from start position to mouse
+    this.mouseLine.clear();
+    this.mouseLine.lineStyle(4, 0x8b4513, 0.8);
+    this.mouseLine.beginPath();
+    this.mouseLine.moveTo(this.lineStartX, this.lineStartY);
+    this.mouseLine.lineTo(pointer.x, pointer.y);
+    this.mouseLine.strokePath();
+  }
+
+  stopMouseFollowingLine() {
+    // Remove mouse following line
+    if (this.mouseLine) {
+      this.mouseLine.destroy();
+      this.mouseLine = null;
+    }
+
+    // Remove pointer move event
+    this.input.off("pointermove", this.updateMouseLine, this);
   }
 
   makeConnectionLinePermanent(firstIndex, secondIndex) {
@@ -425,6 +516,9 @@ export default class WaterGame extends Phaser.Scene {
       this.tempLine = null;
     }
 
+    // Stop mouse following line
+    this.stopMouseFollowingLine();
+
     // Reset all first row selections
     this.firstRowImages.forEach((item) => {
       item.bg.setFillStyle(0x3d2f1f);
@@ -462,6 +556,7 @@ export default class WaterGame extends Phaser.Scene {
       .setOrigin(0.5);
 
     continueBtn.on("pointerdown", () => {
+      this.clickSound.play();
       this.returnToWaterScene();
     });
 
@@ -518,6 +613,7 @@ export default class WaterGame extends Phaser.Scene {
 
     // Click handler
     backBtn.on("pointerdown", () => {
+      this.clickSound.play();
       this.returnToWaterScene();
     });
   }
