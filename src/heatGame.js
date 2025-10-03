@@ -55,9 +55,24 @@ export default class heatGameScene extends Phaser.Scene {
     this.load.image("sink_icon", "/assets/alaa's/over_watering.png");
 
     this.load.image("burn_icon", "/assets/alaa's/burning.png");
+    this.load.image("indian_farmer", "/assets/alaa's/indian_farmer.png");
+
+    // Load click sound
+    this.load.audio("clickSound", "/assets/click.mp3");
+
+    // Load wrong and right soundtrack sounds
+    this.load.audio("wrongSound", "/assets/wrong_soundtrack.mp3");
+    this.load.audio("rightSound", "/assets/right-soundtrack.mp3");
   }
 
   create() {
+    // Initialize click sound
+    this.clickSound = this.sound.add("clickSound", { volume: 0.3 });
+
+    // Initialize wrong and right soundtrack sounds
+    this.wrongSound = this.sound.add("wrongSound", { volume: 0.4 });
+    this.rightSound = this.sound.add("rightSound", { volume: 0.4 });
+
     // Ensure main UI overlay is visible and on top
     const overlay = document.getElementById("uiOverlay");
     if (overlay) {
@@ -108,7 +123,7 @@ export default class heatGameScene extends Phaser.Scene {
       repeat: 0,
     });
     this.anims.create({
-      key: "wheat_burn_anim",
+      key: "wheat_dry_anim",
       frames: this.anims.generateFrameNumbers("wheat_dry", {
         start: 0,
         end: 3,
@@ -261,7 +276,10 @@ export default class heatGameScene extends Phaser.Scene {
       li.appendChild(img);
       li.appendChild(caption);
 
-      const onActivate = () => this.handleAnswer(ans.key);
+      const onActivate = () => {
+        this.clickSound.play();
+        this.handleAnswer(ans.key);
+      };
       li.addEventListener("click", onActivate);
       li.addEventListener("keydown", (ev) => {
         if (ev.key === "Enter" || ev.key === " ") {
@@ -275,8 +293,14 @@ export default class heatGameScene extends Phaser.Scene {
     });
 
     // Wire control buttons
-    this.ui.tryAgainBtn.addEventListener("click", () => this.resetGame());
-    this.ui.nextBtn.addEventListener("click", () => this.nextLevel());
+    this.ui.tryAgainBtn.addEventListener("click", () => {
+      this.clickSound.play();
+      this.resetGame();
+    });
+    this.ui.nextBtn.addEventListener("click", () => {
+      this.clickSound.play();
+      this.nextLevel();
+    });
 
     // Ensure initial state
     this.setFeedback("");
@@ -292,9 +316,11 @@ export default class heatGameScene extends Phaser.Scene {
 
     if (answerKey === "grow") {
       // Correct answer - show growing wheat
+      this.rightSound.play();
       this.showCorrectAnswer();
     } else {
       // Wrong answer - show corresponding negative effect
+      this.wrongSound.play();
       this.showWrongAnswer(answerKey);
     }
   }
@@ -387,10 +413,14 @@ export default class heatGameScene extends Phaser.Scene {
   }
 
   nextLevel() {
-    // Here you can transition to another scene or page
-    alert("Congratulations! Moving to next level...");
-    // Example: this.scene.start('NextLevelScene');
-    // Or redirect to another page: window.location.href = 'next-level.html';
+    // Hide the UI overlay
+    const uiOverlay = document.getElementById("uiOverlay");
+    if (uiOverlay) {
+      uiOverlay.style.display = "none";
+    }
+
+    // Navigate to explore scene
+    this.scene.start("exploreScene");
   }
 
   update() {}
