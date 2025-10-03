@@ -10,6 +10,7 @@ import heatGameScene from "./heatGame.js";
 import WaterScene from "./waterScene.js";
 import waterGame from "./waterGame.js";
 
+
 const gameCanvas = document.getElementById("gameCanvas");
 const sizes = {
   width: window.innerWidth,
@@ -46,6 +47,7 @@ const config = {
     heatGameScene,
     WaterScene,
     waterGame,
+  
   ],
   pixelArt: true,
 };

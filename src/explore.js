@@ -1,4 +1,14 @@
 import Phaser from "phaser";
+
+const dialogPhases = {
+  introduction: [
+    "Crop failure can happen due to various environmental stresses.",
+    "It's important to identify the specific issue affecting the crops.",
+    "Let's take a closer look at the different factors at play."
+  ],
+};
+
+
 class exploreScene extends Phaser.Scene {
   constructor() {
     super({ key: "exploreScene" });
@@ -31,108 +41,142 @@ class exploreScene extends Phaser.Scene {
     this.load.video("heatmap_video", "/assets/heat_video.mp4");
   }
 
-  create() {
-    console.log("Play button clicked!");
+create() {
+  console.log("Play button clicked!");
 
-    // Set pixel art background similar to heatmap scene
-    this.cameras.main.setBackgroundColor(0x2d1810);
+  // Set pixel art background similar to heatmap scene
+  this.cameras.main.setBackgroundColor(0x2d1810);
 
-    // Add scattered brown patches for pixel art effect
-    this.addPixelPatches();
+  // Add scattered brown patches for pixel art effect
+  this.addPixelPatches();
 
-    // Unlock audio context on first user interaction
-    this.input.on("pointerdown", () => {
-      if (
-        this.sound &&
-        this.sound.context &&
-        this.sound.context.state === "suspended"
-      ) {
-        this.sound.context.resume();
-      }
-    });
+  // Unlock audio context on first user interaction
+  this.input.on("pointerdown", () => {
+    if (
+      this.sound &&
+      this.sound.context &&
+      this.sound.context.state === "suspended"
+    ) {
+      this.sound.context.resume();
+    }
+  });
 
-    // Listen for scene completion events
-    this.events.on("sceneComplete", this.onSceneComplete, this);
+  // Listen for scene completion events
+  this.events.on("sceneComplete", this.onSceneComplete, this);
 
-    this.createTitle();
+  this.createTitle();
 
-    // Create 3x2 grid of scene boxes (centered) - bigger size
-    const boxWidth = 160;
-    const boxHeight = 200;
-    const spacingX = 150;
-    const spacingY = 50;
+  // Adjust grid to be more left-aligned to make space for dialog
+  const boxWidth = 160;
+  const boxHeight = 200;
+  const spacingX = 150;
+  const spacingY = 50;
 
-    // Calculate center position for 3x2 grid
-    const totalWidth = 2 * boxWidth;
-    const totalHeight = boxHeight;
-    const startX = (this.scale.width - totalWidth) / 4;
-    const startY = (this.scale.height - totalHeight) / 4;
+  // Position grid more to the left - increased left shift
+  const totalWidth = 3 * boxWidth + 2 * spacingX; // Width for 3 boxes
+  const totalHeight = 2 * boxHeight + spacingY; // Height for 2 rows
+  const startX = (this.scale.width - totalWidth) / 2; // Center horizontally
+  const startY = (this.scale.height - totalHeight) / 2; // Center vertically
 
-    const scenes = [
-      {
-        key: "heatmap",
-        name: "Heat",
-        icon: "heatmap_icon",
-        animKey: "heatmap_video",
-        scene: "HeatmapScene",
-      },
-      {
-        key: "flood",
-        name: "Flood",
-        icon: "float_icon",
-        animKey: "flood_video",
-        scene: "scene-game",
-      },
-      {
-        key: "drought",
-        name: "Drought",
-        icon: "drought_icon",
-        animKey: "drought_video",
-        scene: "MoistureScene",
-      },
-      {
-        key: "salinized",
-        name: "Salinized Soil",
-        icon: "salinized_icon",
-        animKey: "salinized_video",
-        scene: "SalinizedScene",
-      },
-      {
-        key: "water",
-        name: "Water Management",
-        icon: "water_icon",
-        animKey: "water_video",
-        scene: "WaterScene",
-      },
-      {
-        key: "animals",
-        name: "Animals",
-        icon: "animals_icon",
-        animKey: "animals_video",
-        scene: "AnimalsScene",
-      },
-    ];
+  // Define scenes with their explanations
+  this.sceneExplanations = {
+    heatmap: "Heat stress affects crop growth by damaging plant cells and reducing photosynthesis efficiency.",
+    flood: "Flooding deprives roots of oxygen and can lead to root rot and nutrient leaching.",
+    drought: "Drought stress causes water deficiency, leading to wilting and reduced crop yields.",
+    salinized: "Salinized soil reduces water uptake and can be toxic to many crop species.",
+    water: "Proper water management ensures optimal growth while conserving precious resources.",
+  };
 
-    scenes.forEach((scene, index) => {
-      const row = Math.floor(index / 3);
-      const col = index % 3;
-      const x = startX + col * (boxWidth + spacingX) + boxWidth / 2;
-      const y = startY + row * (boxHeight + spacingY) + boxHeight / 2;
+  const scenes = [
+    {
+      key: "heatmap",
+      name: "Heat",
+      icon: "heatmap_icon",
+      animKey: "heatmap_video",
+      scene: "HeatmapScene",
+      explanation: this.sceneExplanations.heatmap
+    },
+    {
+      key: "flood",
+      name: "Flood",
+      icon: "float_icon",
+      animKey: "flood_video",
+      scene: "scene-game",
+      explanation: this.sceneExplanations.flood
+    },
+    {
+      key: "drought",
+      name: "Drought",
+      icon: "drought_icon",
+      animKey: "drought_video",
+      scene: "MoistureScene",
+      explanation: this.sceneExplanations.drought
+    },
+    {
+      key: "salinized",
+      name: "Salinized Soil",
+      icon: "salinized_icon",
+      animKey: "salinized_video",
+      scene: "SalinizedScene",
+      explanation: this.sceneExplanations.salinized
+    },
+    {
+      key: "water",
+      name: "Water Management",
+      icon: "water_icon",
+      animKey: "water_video",
+      scene: "WaterScene",
+      explanation: this.sceneExplanations.water
+    },
+  ];
 
-      this.createSceneBox(x, y, scene, boxWidth, boxHeight);
-    });
+  // Create 3 boxes on top row, 2 boxes on bottom row (centered)
+  scenes.forEach((scene, index) => {
+    let x, y;
+    
+    if (index < 3) {
+      // Top row - 3 boxes
+      const col = index;
+      x = startX + col * (boxWidth + spacingX) + boxWidth / 2;
+      y = startY + boxHeight / 2;
+    } else {
+      // Bottom row - 2 boxes, centered
+      const col = index - 3;
+      // Center the two boxes by adding half the width of a box + spacing
+      const centerOffset = (boxWidth + spacingX) / 2;
+      x = startX + col * (boxWidth + spacingX) + boxWidth / 2 + centerOffset;
+      y = startY + boxHeight + spacingY + boxHeight / 2;
+    }
 
-    // Draw dotted lines connecting scenes in clockwise order
-    this.drawConnectingLines(
-      scenes,
-      startX,
-      startY,
-      boxWidth,
-      boxHeight,
-      spacingX,
-      spacingY
-    );
-  }
+    this.createSceneBox(x, y, scene, boxWidth, boxHeight);
+  });
+
+  // Update the connecting lines for the new arrangement
+  this.drawConnectingLines(
+    scenes,
+    startX,
+    startY,
+    boxWidth,
+    boxHeight,
+    spacingX,
+    spacingY
+  );
+
+  this.createDialogBox();
+  this.addDecorativeElements();
+
+  // Fade in entrance
+  this.cameras.main.fadeIn(800, 0, 0, 0);
+  
+  // Initialize dialog
+  this.dialogIndex = 0;
+  this.currentSceneExplanation = null;
+  this.isShowingHover = false; // Add this flag
+  
+  this.time.delayedCall(500, () => {
+    this.typewriteDialog(dialogPhases.introduction[0]);
+  });
+}
 
   createSceneBox(x, y, sceneData, width, height) {
     // Create main box
@@ -198,6 +242,11 @@ class exploreScene extends Phaser.Scene {
         ease: "Sine.easeInOut",
       });
 
+      // Show scene-specific explanation in dialog
+      if (sceneData.explanation) {
+        this.showSceneExplanation(sceneData.explanation);
+      }
+
       // Start video on hover (for all scenes with videos)
       if (sceneData.animKey) {
         console.log(
@@ -243,10 +292,6 @@ class exploreScene extends Phaser.Scene {
               videoWidth = 160;
               videoHeight = 160;
               break;
-            case "animals":
-              videoWidth = 240;
-              videoHeight = 200;
-              break;
             default:
               videoWidth = 180;
               videoHeight = 180;
@@ -275,6 +320,11 @@ class exploreScene extends Phaser.Scene {
         ease: "Sine.easeInOut",
       });
 
+      // Return to introduction text when not hovering
+      if (this.isShowingHover) {
+        this.showIntroductionText();
+      }
+
       // Stop video and switch back to static image
       if (sceneImage.getData("isAnimating")) {
         console.log("Stopping video for", sceneData.name, "scene");
@@ -292,7 +342,6 @@ class exploreScene extends Phaser.Scene {
     });
 
     // Click handler - all scenes always available
-
     box.on("pointerdown", () => {
       const sceneData = box.getData("sceneData");
       console.log(`Clicked on scene: ${sceneData.name}`);
@@ -407,44 +456,303 @@ class exploreScene extends Phaser.Scene {
     }
   }
 
-  drawConnectingLines(
-    scenes,
-    startX,
-    startY,
-    boxWidth,
-    boxHeight,
-    spacingX,
-    spacingY
-  ) {
-    // Calculate center positions for all 6 scenes
-    const positions = [];
-    scenes.forEach((scene, index) => {
-      const row = Math.floor(index / 3);
-      const col = index % 3;
-      const x = startX + col * (boxWidth + spacingX) + boxWidth / 2;
-      const y = startY + row * (boxHeight + spacingY) + boxHeight / 2;
-      positions.push({ x, y });
-    });
+  createDialogBox() {
+  // Position dialog box to the right of the grid but closer
+  const gridRightEdge = this.scale.width / 2 + 150; // Adjusted to be closer
+  const dialogX = gridRightEdge + 300; // Reduced from 150 to 100
+  const dialogY = this.scale.height-150; 
 
-    // Define clockwise order: 1st -> 2nd -> 3rd -> 4th -> 5th -> 6th -> 1st
-    const clockwiseOrder = [0, 1, 2, 3, 4, 5, 0]; // Last 0 to connect back to first
+  this.dialogContainer = this.add.container(dialogX, dialogY)
+    .setDepth(10)
+    .setAlpha(0);
 
-    // Create graphics object for drawing lines
-    const graphics = this.add.graphics();
-    graphics.lineStyle(3, 0x8b4513, 0.8); // Brown dotted line
+  // Smaller dialog box dimensions
+  const dialogBoxBg = this.add.rectangle(0, 0, 300, 120, 0x1a1a2e, 0.98); // Reduced from 400x200 to 320x150
+  dialogBoxBg.setStrokeStyle(3, 0x00cc00); // Slightly thinner border
 
-    // Draw dotted lines connecting scenes in clockwise order
-    for (let i = 0; i < clockwiseOrder.length - 1; i++) {
-      const fromIndex = clockwiseOrder[i];
-      const toIndex = clockwiseOrder[i + 1];
+  // Smaller speaker indicator
+  const speakerBg = this.add.rectangle(-140, -60, 120, 22, 0x00cc00); // Reduced size
+  const speakerText = this.add.text(-140, -60, "GUIDE", {
+    fontFamily: "'Press Start 2P', Courier New",
+    fontSize: "9px", // Smaller font
+    color: "#0a2f4a",
+    fontStyle: "bold"
+  }).setOrigin(0.5);
 
-      const fromPos = positions[fromIndex];
-      const toPos = positions[toIndex];
+  // Adjusted text with smaller dimensions
+  this.dialogText = this.add.text(0, -20, "", { // Adjusted vertical position
+    fontFamily: "Courier New",
+    fontSize: "15px", // Slightly smaller font
+    color: "#e0f7ff",
+    wordWrap: { width: 300, useAdvancedWrap: true }, // Reduced wrap width
+    align: "left",
+    lineSpacing: 4 // Reduced spacing
+  }).setOrigin(0.5, 0);
 
-      // Create dotted line effect
-      this.drawDottedLine(graphics, fromPos.x, fromPos.y, toPos.x, toPos.y);
+  // Smaller click indicator
+  this.clickText = this.add.text(0, 55, "▼ CLICK TO CONTINUE ▼", { // Adjusted vertical position
+    fontFamily: "'Press Start 2P', Courier New",
+    fontSize: "7px", // Smaller font
+    color: "#66ccff",
+    fontStyle: "bold"
+  }).setOrigin(0.5).setVisible(false);
+
+  this.tweens.add({
+    targets: this.clickText,
+    alpha: 0.4,
+    y: 58, // Adjusted to match new position
+    duration: 700,
+    yoyo: true,
+    repeat: -1,
+    ease: "Sine.inOut"
+  });
+
+  this.dialogContainer.add([
+    dialogBoxBg, 
+    speakerBg, 
+    speakerText, 
+    this.dialogText, 
+    this.clickText
+  ]);
+
+  // Fade in
+  this.tweens.add({
+    targets: this.dialogContainer,
+    alpha: 1,
+    duration: 800,
+    ease: 'Power2'
+  });
+
+  dialogBoxBg.setInteractive();
+  dialogBoxBg.on("pointerdown", () => {
+    if (this.isTyping) {
+      this.completeTypewriter();
+    } else if (this.clickText.visible) {
+      this.advanceDialog();
+    }
+  });
+
+  dialogBoxBg.on('pointerover', () => {
+    dialogBoxBg.setStrokeStyle(3, 0x00ff00);
+  });
+
+  dialogBoxBg.on('pointerout', () => {
+    dialogBoxBg.setStrokeStyle(3, 0x00cc00);
+  });
+
+  // Gentle float (unchanged)
+  this.tweens.add({
+    targets: this.dialogContainer,
+    y: this.dialogContainer.y - 4,
+    duration: 2000,
+    yoyo: true,
+    repeat: -1,
+    ease: "Sine.easeInOut"
+  });
+}
+
+  addDecorativeElements() {
+    const width = this.sys.game.config.width;
+    const height = this.sys.game.config.height;
+
+    // Bottom water-themed decorations
+    for (let i = 0; i < 10; i++) {
+      const x = 40 + i * 20;
+      const wave = this.add.circle(x, height - 35, 5, 0x4499dd, 0.6).setDepth(2);
+      
+      this.tweens.add({
+        targets: wave,
+        alpha: 0.3,
+        y: wave.y - 3,
+        duration: 1200 + i * 100,
+        yoyo: true,
+        repeat: -1,
+        ease: 'Sine.inOut'
+      });
+
+      const wave2 = this.add.circle(width - x, height - 35, 5, 0x4499dd, 0.6).setDepth(2);
+      this.tweens.add({
+        targets: wave2,
+        alpha: 0.3,
+        y: wave2.y - 3,
+        duration: 1200 + i * 100,
+        yoyo: true,
+        repeat: -1,
+        ease: 'Sine.inOut'
+      });
     }
   }
+
+advanceDialog() {
+  // Only advance if we're not showing a hover explanation
+  if (!this.isShowingHover) {
+    this.dialogIndex++;
+    
+    if (this.dialogIndex >= dialogPhases.introduction.length) {
+      // All introduction dialogs completed
+      this.typewriteDialog("Select a scenario to learn about different crop challenges.");
+      return;
+    }
+    this.typewriteDialog(dialogPhases.introduction[this.dialogIndex]);
+  }
+}
+
+typewriteDialog(text) {
+  // Don't start typing if we're showing a hover explanation
+  if (this.isShowingHover) return;
+  
+  this.isTyping = true;
+  this.currentTypewriterText = text;
+  this.dialogText.setText("");
+  this.clickText.setVisible(false);
+  
+  let i = 0;
+  
+  if (this.typewriterTimer) {
+    this.typewriterTimer.remove();
+  }
+  
+  this.typewriterTimer = this.time.addEvent({
+    delay: 45,
+    callback: () => {
+      // Stop typing if hover started
+      if (this.isShowingHover) {
+        this.typewriterTimer.remove();
+        return;
+      }
+      
+      this.dialogText.text += text[i];
+      i++;
+      if (i >= text.length) {
+        this.typewriterTimer.remove();
+        this.isTyping = false;
+        this.clickText.setVisible(true);
+      }
+    },
+    loop: true
+  });
+}
+
+
+// Update the completeTypewriter method:
+completeTypewriter() {
+  if (this.typewriterTimer) {
+    this.typewriterTimer.remove();
+  }
+  this.dialogText.setText(this.currentTypewriterText);
+  this.isTyping = false;
+  this.clickText.setVisible(true);
+}
+
+ showDialog(text) {
+  this.dialogText.setText(text);
+  this.dialogText.setAlpha(0);
+
+  this.tweens.add({
+    targets: this.dialogText,
+    alpha: 1,
+    duration: 600,
+    ease: "Power2"
+  });
+}
+
+//explanatons
+
+createHoverDialog() {
+  const dialogX = this.scale.width * 0.75; // right side
+  const dialogY = this.scale.height / 2 + 120; // under main box
+
+  this.hoverDialog = this.add.container(dialogX, dialogY)
+    .setDepth(11)
+    .setAlpha(0)
+    .setVisible(false);
+
+  const hoverBg = this.add.rectangle(0, 0, 320, 100, 0x2a2a40, 0.95);
+  hoverBg.setStrokeStyle(2, 0x00ccff);
+
+  this.hoverText = this.add.text(0, 0, "", {
+    fontFamily: "Courier New",
+    fontSize: "13px",
+    color: "#ffffff",
+    wordWrap: { width: 300, useAdvancedWrap: true },
+    align: "center"
+  }).setOrigin(0.5);
+
+  this.hoverDialog.add([hoverBg, this.hoverText]);
+}
+
+
+showHoverDialog(text) {
+  this.hoverText.setText(text);
+  this.hoverDialog.setVisible(true).setAlpha(0);
+  this.tweens.add({
+    targets: this.hoverDialog,
+    alpha: 1,
+    duration: 300
+  });
+}
+
+hideHoverDialog() {
+  this.tweens.add({
+    targets: this.hoverDialog,
+    alpha: 0,
+    duration: 200,
+    onComplete: () => this.hoverDialog.setVisible(false)
+  });
+}
+
+
+drawConnectingLines(
+  scenes,
+  startX,
+  startY,
+  boxWidth,
+  boxHeight,
+  spacingX,
+  spacingY
+) {
+  // Calculate center positions for all 5 scenes
+  const positions = [];
+  scenes.forEach((scene, index) => {
+    let x, y;
+    
+    if (index < 3) {
+      // Top row - 3 boxes
+      const col = index;
+      x = startX + col * (boxWidth + spacingX) + boxWidth / 2;
+      y = startY + boxHeight / 2;
+    } else {
+      // Bottom row - 2 boxes, centered
+      const col = index - 3;
+      const centerOffset = (boxWidth + spacingX) / 2;
+      x = startX + col * (boxWidth + spacingX) + boxWidth / 2 + centerOffset;
+      y = startY + boxHeight + spacingY + boxHeight / 2;
+    }
+    positions.push({ x, y });
+  });
+
+  // Define connecting order: top row left->right, then connect to bottom row
+  const connectingOrder = [0, 1, 2, 3, 4]; // Simple linear order
+
+  // Create graphics object for drawing lines
+  const graphics = this.add.graphics();
+  graphics.lineStyle(3, 0x8b4513, 0.8); // Brown dotted line
+
+  // Draw dotted lines connecting scenes in order
+  for (let i = 0; i < connectingOrder.length - 1; i++) {
+    const fromIndex = connectingOrder[i];
+    const toIndex = connectingOrder[i + 1];
+
+    const fromPos = positions[fromIndex];
+    const toPos = positions[toIndex];
+
+    // Create dotted line effect
+    this.drawDottedLine(graphics, fromPos.x, fromPos.y, toPos.x, toPos.y);
+  }
+
+  // Optional: Connect last box back to first for a complete loop
+  this.drawDottedLine(graphics, positions[4].x, positions[4].y, positions[0].x, positions[0].y);
+}
 
   drawDottedLine(graphics, x1, y1, x2, y2, dashLength = 10, gapLength = 5) {
     const distance = Phaser.Math.Distance.Between(x1, y1, x2, y2);
@@ -466,6 +774,37 @@ class exploreScene extends Phaser.Scene {
       graphics.lineTo(endX, endY);
     }
   }
+showSceneExplanation(explanation) {
+  this.isShowingHover = true;
+  this.currentSceneExplanation = explanation;
+  
+  // Stop any current typing
+  if (this.typewriterTimer) {
+    this.typewriterTimer.remove();
+  }
+  
+  // Hide the click text during hover
+  this.clickText.setVisible(false);
+  
+  // Set the text immediately for hover
+  this.dialogText.setText(explanation);
+  this.dialogText.setAlpha(1);
+}
+
+
+showIntroductionText() {
+  this.isShowingHover = false;
+  this.currentSceneExplanation = null;
+  
+  // Show the last introduction dialog or a default message
+  if (this.dialogIndex < dialogPhases.introduction.length) {
+    const currentIntro = dialogPhases.introduction[this.dialogIndex];
+    this.typewriteDialog(currentIntro);
+  } else {
+    // All introduction dialogs completed, show default message
+    this.typewriteDialog("Select a scenario to learn about different crop challenges.");
+  }
+}
 }
 
 export default exploreScene;

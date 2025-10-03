@@ -8,9 +8,9 @@ const sizes = {
 
 const dialogPhases = {
   introduction: [
-    "Let's Explore Flooding Problems!",
+    "Hey, Henry! Let's Explore Flooding Problems in my country!",
     "This is Pakistan before and after the 2022 Flood!",
-    "Let's look at their crops during the flood...",
+    "Let's look at the crops during the flood...",
     "Oh?! The crops are super damaged!",
     "Let's play a mini-game to recover crops and soil.",
   ],
@@ -23,14 +23,15 @@ export class GameScene extends Phaser.Scene {
     this.displayedImages = [];
   }
 
-  preload() {
-    this.load.image("bged", "/assets/bgrain.jpg");
-    this.load.image("farmer", "/assets/farmerr.png");
-    this.load.image("pakibef", "/assets/pakibef.jpg");
-    this.load.image("pakiafter", "/assets/pakiafter.jpg");
-    this.load.image("flood1", "/assets/midwestflooding_pho_2025_lrg.jpg");
-    this.load.image("flood3", "/assets/midwestfloodingwide_pho_2025_lrg.jpg");
-  }
+ preload() {
+  this.load.image("bged", "assets/bgrain.jpg");
+  this.load.image("farmer", "assets/farmerr.png");
+  this.load.image("pakibef", "assets/pakibef.jpg");
+  this.load.image("pakiafter", "assets/pakiafter.jpg");
+  this.load.image("flood1", "assets/midwestflooding_pho_2025_lrg.jpg");
+  this.load.image("flood3", "assets/midwestfloodingwide_pho_2025_lrg.jpg");
+  this.load.image("pakifarmer", "assets/pakifarmer.png");
+}
 
   create() {
     const centerX = this.sys.game.config.width / 2;
@@ -44,7 +45,7 @@ export class GameScene extends Phaser.Scene {
     this.bg.displayWidth = this.sys.game.config.width;
     this.bg.displayHeight = this.sys.game.config.height;
     this.bg.setDepth(0);
-    this.bg.setAlpha(0.85);
+    this.bg.setAlpha(0.5);
 
     this.createTitle();
     this.createBackButton();
@@ -174,7 +175,7 @@ export class GameScene extends Phaser.Scene {
   }
 
   createFarmerSprite() {
-    this.farmer = this.add.sprite(300, sizes.height - 110, 'farmer')
+    this.farmer = this.add.sprite(300, sizes.height - 110, 'pakifarmer')
       .setScale(0.2)
       .setDepth(12)
       .setAlpha(0);
@@ -211,7 +212,7 @@ export class GameScene extends Phaser.Scene {
 
     // Speaker indicator
     const speakerBg = this.add.rectangle(-230, -50, 160, 30, 0x4499dd);
-    const speakerText = this.add.text(-230, -50, "HENRY", {
+    const speakerText = this.add.text(-230, -50, "BILAL", {
       fontFamily: "'Press Start 2P', Courier New",
       fontSize: "11px",
       color: "#0a2f4a",
@@ -219,13 +220,16 @@ export class GameScene extends Phaser.Scene {
     }).setOrigin(0.5);
 
     this.dialogText = this.add.text(0, -20, "", {
-      fontFamily: "Courier New",
-      fontSize: "15px",
-      color: "#e0f7ff",
-      wordWrap: { width: 560, useAdvancedWrap: true },
-      align: "center",
-      lineSpacing: 6
-    }).setOrigin(0.5);
+    fontFamily: "Courier New",
+    fontSize: "15px",
+    color: "#e0f7ff",
+    wordWrap: { 
+      width: 460, // Reduced from 560 to fit within the 500px box with padding
+      useAdvancedWrap: true 
+    },
+    align: "center",
+    lineSpacing: 6
+  }).setOrigin(0.5);
 
     this.clickText = this.add.text(0, 55, "▼ CLICK TO CONTINUE ▼", {
       fontFamily: "'Press Start 2P', Courier New",
@@ -359,7 +363,7 @@ export class GameScene extends Phaser.Scene {
       this.time.delayedCall(600, () => this.displayRicePictures());
     } 
 
-    if (text === "Let's look at their crops during the flood...") {
+    if (text === "Let's look at the crops during the flood...") {
       this.time.delayedCall(600, () => this.displayCrops());
     } 
 
@@ -381,127 +385,122 @@ export class GameScene extends Phaser.Scene {
     this.clickText.setVisible(true);
   }
 
-  displayRicePictures() {
-    this.hideRicePictures();
-    const width = sizes.width;
-    const height = sizes.height;
+displayRicePictures() {
+  this.hideRicePictures();
+  const width = sizes.width;
+  const height = sizes.height;
 
-    // Enhanced container with better styling
-    const container = this.add.container(width / 2, height / 2 - 40).setDepth(9).setAlpha(0);
+  const container = this.add.container(width / 2, height / 2 - 40).setDepth(9).setAlpha(0);
 
-    // Frame with gradient effect
-    const outerFrame = this.add.rectangle(0, 0, 550, 320, 0x0a2f4a, 0.95);
-    outerFrame.setStrokeStyle(5, 0x4499dd);
+  // Frame
+  const outerFrame = this.add.rectangle(0, 0, 550, 320, 0x0a2f4a, 0.95);
+  outerFrame.setStrokeStyle(5, 0x4499dd);
 
-    const innerFrame = this.add.rectangle(0, 0, 520, 290, 0x1a3d5a);
-    innerFrame.setStrokeStyle(3, 0x66ccff);
+  const innerFrame = this.add.rectangle(0, 0, 520, 290, 0x1a3d5a);
+  innerFrame.setStrokeStyle(3, 0x66ccff);
 
-    // Title with better styling
-    const titleBg = this.add.rectangle(0, -130, 280, 45, 0x4499dd);
-    const titleText = this.add.text(0, -130, 'Pakistan 2022 Flood', {
-      fontSize: '16px',
-      fontFamily: "'Press Start 2P', Courier New",
-      color: '#ffffff',
-      fontStyle: 'bold'
-    }).setOrigin(0.5);
+  // Title
+  const titleBg = this.add.rectangle(0, -130, 280, 45, 0x4499dd);
+  const titleText = this.add.text(0, -130, 'Pakistan 2022 Flood', {
+    fontSize: '16px',
+    fontFamily: "'Press Start 2P', Courier New",
+    color: '#ffffff',
+    fontStyle: 'bold'
+  }).setOrigin(0.5);
 
-    // Slider setup
-    const sliderWidth = 480;
-    const sliderHeight = 240;
+  // Image setup
+  const imageWidth = 480;
+  const imageHeight = 240;
 
-    const beforeImage = this.add.image(0, 10, "pakibef")
-      .setDisplaySize(sliderWidth, sliderHeight);
-    const afterImage = this.add.image(0, 10, "pakiafter")
-      .setDisplaySize(sliderWidth, sliderHeight);
+  // Create both images positioned in the same place
+  const beforeImage = this.add.image(0, 10, "pakibef")
+    .setDisplaySize(imageWidth, imageHeight)
+    .setAlpha(1); // Start with before image visible
 
-    const maskShape = this.make.graphics();
-    maskShape.fillRect(-sliderWidth / 2, 10 - sliderHeight / 2, sliderWidth / 2, sliderHeight);
-    const mask = maskShape.createGeometryMask();
-    afterImage.setMask(mask);
+  const afterImage = this.add.image(0, 10, "pakiafter")
+    .setDisplaySize(imageWidth, imageHeight)
+    .setAlpha(0); // Start with after image hidden
 
-    // Enhanced slider with better visuals
-    const sliderBar = this.add.rectangle(0, 10, 6, sliderHeight + 20, 0xffffff);
-    sliderBar.setStrokeStyle(2, 0x4499dd);
-    sliderBar.setInteractive({ draggable: true });
+  // Simple slider bar
+  const sliderBar = this.add.rectangle(0, 150, 300, 8, 0x666666)
+    .setInteractive({ useHandCursor: true });
+  
+  const sliderHandle = this.add.circle(-150, 150, 12, 0x4499dd)
+    .setStrokeStyle(2, 0xffffff)
+    .setInteractive({ draggable: true, useHandCursor: true });
 
-    // Slider handle
-    const sliderHandle = this.add.circle(0, 10, 15, 0x4499dd);
-    sliderHandle.setStrokeStyle(3, 0xffffff);
+  // Labels
+  const beforeLabel = this.add.text(-180, 150, 'BEFORE', {
+    fontSize: '12px',
+    fontFamily: 'Courier New',
+    color: '#66ccff'
+  }).setOrigin(0.5);
 
-    this.tweens.add({
-      targets: [sliderBar, sliderHandle],
-      alpha: { from: 1, to: 0.8 },
-      duration: 600,
-      yoyo: true,
-      repeat: -1,
-      ease: 'Sine.inOut'
-    });
+  const afterLabel = this.add.text(180, 150, 'AFTER', {
+    fontSize: '12px',
+    fontFamily: 'Courier New',
+    color: '#66ccff'
+  }).setOrigin(0.5);
 
-    sliderBar.on('drag', (pointer, dragX) => {
-      const minX = -sliderWidth / 2;
-      const maxX = sliderWidth / 2;
-      sliderBar.x = Phaser.Math.Clamp(dragX, minX, maxX);
-      sliderHandle.x = sliderBar.x;
+  // Slider functionality
+  const onDrag = (pointer, dragX) => {
+    const minX = -150;
+    const maxX = 150;
+    const newX = Phaser.Math.Clamp(dragX, minX, maxX);
+    
+    sliderHandle.x = newX;
+    
+    // Calculate alpha values based on slider position
+    const progress = (newX - minX) / (maxX - minX);
+    beforeImage.setAlpha(1 - progress);
+    afterImage.setAlpha(progress);
+  };
 
-      maskShape.clear();
-      maskShape.fillRect(minX, 10 - sliderHeight / 2, sliderBar.x - minX, sliderHeight);
-    });
+  sliderHandle.on('drag', onDrag);
 
-    // Instruction box with better styling
-    const instructionBg = this.add.rectangle(0, 150, 480, 50, 0x0a2f4a, 0.95);
-    instructionBg.setStrokeStyle(3, 0x4499dd);
+  // Also make the slider bar clickable
+  sliderBar.on('pointerdown', (pointer) => {
+    const localX = pointer.x - (width / 2);
+    onDrag(pointer, localX);
+  });
 
-    const instructionText = this.add.text(0, 150, 
-      '◄ Drag the slider to compare Before & After (NASA MODIS) ►', {
-      fontSize: '11px',
-      fontFamily: 'Courier New',
-      color: '#66ccff',
-      align: 'center'
-    }).setOrigin(0.5);
+  container.add([
+    outerFrame, innerFrame, titleBg, titleText, 
+    beforeImage, afterImage, sliderBar, sliderHandle,
+    beforeLabel, afterLabel
+  ]);
 
-    container.add([
-      outerFrame, innerFrame, titleBg, titleText, 
-      beforeImage, afterImage, sliderBar, sliderHandle,
-      instructionBg, instructionText
-    ]);
+  this.displayedImages = [container];
 
-    this.displayedImages = [container];
-
-    // Fade in with scale
-    this.tweens.add({
-      targets: container,
-      alpha: 1,
-      scale: { from: 0.9, to: 1 },
-      duration: 600,
-      ease: 'Back.easeOut'
-    });
-
-    // Gentle float
-    this.tweens.add({
-      targets: container,
-      y: height / 2 - 35,
-      duration: 3000,
-      yoyo: true,
-      repeat: -1,
-      ease: "Sine.inOut"
-    });
-  }
-
-  hideRicePictures() {
-    if (this.displayedImages.length > 0) {
-      this.displayedImages.forEach(el => {
-        this.tweens.add({
-          targets: el,
-          alpha: 0,
-          scale: 0.9,
-          duration: 400,
-          onComplete: () => el.destroy()
-        });
+  // Fade in
+  this.tweens.add({
+    targets: container,
+    alpha: 1,
+    scale: { from: 0.9, to: 1 },
+    duration: 600,
+    ease: 'Back.easeOut'
+  });
+}
+hideRicePictures() {
+  if (this.displayedImages.length > 0) {
+    this.displayedImages.forEach(el => {
+      this.tweens.add({
+        targets: el,
+        alpha: 0,
+        scale: 0.9,
+        duration: 400,
+        onComplete: () => el.destroy()
       });
-      this.displayedImages = [];
-    }
+    });
+    this.displayedImages = [];
   }
-
+  
+  // Clean up mask graphics
+  if (this.currentMaskGraphics) {
+    this.currentMaskGraphics.destroy();
+    this.currentMaskGraphics = null;
+  }
+}
   displayCrops() {
     this.hideCrops();
     const width = sizes.width;
