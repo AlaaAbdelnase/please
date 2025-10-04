@@ -28,6 +28,8 @@ export default class HeatmapScene extends Phaser.Scene {
     this.load.audio("wrongSound", "/assets/wrong_soundtrack.mp3");
     this.load.audio("rightSound", "/assets/right-soundtrack.mp3");
 
+    // No background music loading
+
     // Debug loading
     this.load.on("filecomplete-image-indian_farmer", () => {
       console.log("✅ Indian farmer loaded successfully");
@@ -65,6 +67,8 @@ export default class HeatmapScene extends Phaser.Scene {
     // Initialize wrong and right soundtrack sounds
     this.wrongSound = this.sound.add("wrongSound", { volume: 0.4 });
     this.rightSound = this.sound.add("rightSound", { volume: 0.4 });
+
+    // No background music - only click sounds
 
     // Hide the main UI overlay completely
     const ui = document.getElementById("uiOverlay");

@@ -56,6 +56,8 @@ export default class WaterScene extends Phaser.Scene {
     // Load wrong and right soundtrack sounds
     this.load.audio("wrongSound", "/assets/wrong_soundtrack.mp3");
     this.load.audio("rightSound", "/assets/right-soundtrack.mp3");
+
+    // No background music loading
   }
 
   create() {
@@ -69,6 +71,8 @@ export default class WaterScene extends Phaser.Scene {
     // Initialize wrong and right soundtrack sounds
     this.wrongSound = this.sound.add("wrongSound", { volume: 0.4 });
     this.rightSound = this.sound.add("rightSound", { volume: 0.4 });
+
+    // No background music - only click sounds
 
     // Title
     this.add

@@ -9,7 +9,10 @@ import HeatmapScene from "./heatmapScene.js";
 import heatGameScene from "./heatGame.js";
 import WaterScene from "./waterScene.js";
 import waterGame from "./waterGame.js";
-
+import { DroughtScene, PlayScene, ResultScene } from "./drought.js";
+import { SalinizedFarmScene } from "./SalinizedFarmScene.js";
+import NDVIMapScene from "./NDVImap.js";
+import { Game } from "./Start.js";
 
 const gameCanvas = document.getElementById("gameCanvas");
 const sizes = {
@@ -47,7 +50,12 @@ const config = {
     heatGameScene,
     WaterScene,
     waterGame,
-  
+    DroughtScene,
+    PlayScene,
+    ResultScene,
+    SalinizedFarmScene,
+    NDVIMapScene,
+    Game,
   ],
   pixelArt: true,
 };

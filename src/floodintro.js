@@ -1,5 +1,5 @@
-import './style.css'
-import Phaser from 'phaser'
+import "./style.css";
+import Phaser from "phaser";
 
 const sizes = {
   width: window.innerWidth,
@@ -18,29 +18,47 @@ const dialogPhases = {
 
 export class GameScene extends Phaser.Scene {
   constructor() {
-    super('scene-game');
+    super("scene-game");
     this.dialogIndex = 0;
     this.displayedImages = [];
   }
 
- preload() {
-  this.load.image("bged", "assets/bgrain.jpg");
-  this.load.image("farmer", "assets/farmerr.png");
-  this.load.image("pakibef", "assets/pakibef.jpg");
-  this.load.image("pakiafter", "assets/pakiafter.jpg");
-  this.load.image("flood1", "assets/midwestflooding_pho_2025_lrg.jpg");
-  this.load.image("flood3", "assets/midwestfloodingwide_pho_2025_lrg.jpg");
-  this.load.image("pakifarmer", "assets/pakifarmer.png");
-}
+  preload() {
+    this.load.image("bged", "assets/bgrain.jpg");
+    this.load.image("farmer", "assets/farmerr.png");
+    this.load.image("pakibef", "assets/pakibef.jpg");
+    this.load.image("pakiafter", "assets/pakiafter.jpg");
+    this.load.image("flood1", "assets/midwestflooding_pho_2025_lrg.jpg");
+    this.load.image("flood3", "assets/midwestfloodingwide_pho_2025_lrg.jpg");
+    this.load.image("pakifarmer", "assets/pakifarmer.png");
+
+    // Load click sound
+    this.load.audio("clickSound", "/assets/click.mp3");
+
+    // Load wrong and right soundtrack sounds
+    this.load.audio("wrongSound", "/assets/wrong_soundtrack.mp3");
+    this.load.audio("rightSound", "/assets/right-soundtrack.mp3");
+
+    // No background music loading
+  }
 
   create() {
     const centerX = this.sys.game.config.width / 2;
     const centerY = this.sys.game.config.height / 2;
 
+    // Initialize click sound
+    this.clickSound = this.sound.add("clickSound", { volume: 0.3 });
+
+    // Initialize wrong and right soundtrack sounds
+    this.wrongSound = this.sound.add("wrongSound", { volume: 0.4 });
+    this.rightSound = this.sound.add("rightSound", { volume: 0.4 });
+
+    // No background music - only click sounds
+
     // Enhanced background with overlay
-    this.cameras.main.setBackgroundColor('#0a1f2e');
+    this.cameras.main.setBackgroundColor("#0a1f2e");
     this.createAtmosphericBackground();
-    
+
     this.bg = this.add.image(centerX, centerY, "bged").setOrigin(0.5);
     this.bg.displayWidth = this.sys.game.config.width;
     this.bg.displayHeight = this.sys.game.config.height;
@@ -52,7 +70,7 @@ export class GameScene extends Phaser.Scene {
     this.createFarmerSprite();
     this.createDialogBox();
     this.addDecorativeElements();
-    
+
     // Fade in entrance
     this.cameras.main.fadeIn(800, 0, 0, 0);
     this.time.delayedCall(500, () => {
@@ -65,8 +83,10 @@ export class GameScene extends Phaser.Scene {
     for (let i = 0; i < 20; i++) {
       const x = Math.random() * this.sys.game.config.width;
       const y = Math.random() * this.sys.game.config.height;
-      const raindrop = this.add.rectangle(x, y, 2, 8, 0x6699cc, 0.3).setDepth(0.3);
-      
+      const raindrop = this.add
+        .rectangle(x, y, 2, 8, 0x6699cc, 0.3)
+        .setDepth(0.3);
+
       this.tweens.add({
         targets: raindrop,
         y: y + 200 + Math.random() * 100,
@@ -74,7 +94,7 @@ export class GameScene extends Phaser.Scene {
         duration: 1500 + Math.random() * 1000,
         repeat: -1,
         delay: Math.random() * 2000,
-        ease: 'Linear'
+        ease: "Linear",
       });
     }
   }
@@ -82,32 +102,45 @@ export class GameScene extends Phaser.Scene {
   createTitle() {
     const width = this.sys.game.config.width;
 
-    const titleBg = this.add.rectangle(width / 2, 40, width - 60, 70, 0x0a2f4a, 0.95);
+    const titleBg = this.add.rectangle(
+      width / 2,
+      40,
+      width - 60,
+      70,
+      0x0a2f4a,
+      0.95
+    );
     titleBg.setStrokeStyle(4, 0x4499dd);
     titleBg.setDepth(15);
 
-    this.titleText = this.add.text(width / 2, 35, 'Flood Stories', {
-      fontSize: '26px',
-      fontFamily: "'Press Start 2P', Courier New",
-      color: '#66ccff',
-      fontStyle: 'bold'
-    }).setOrigin(0.5).setDepth(15);
+    this.titleText = this.add
+      .text(width / 2, 35, "Flood Stories", {
+        fontSize: "26px",
+        fontFamily: "'Press Start 2P', Courier New",
+        color: "#66ccff",
+        fontStyle: "bold",
+      })
+      .setOrigin(0.5)
+      .setDepth(15);
 
-    const subtitle = this.add.text(width / 2, 58, 'From Around The World', {
-      fontSize: '12px',
-      fontFamily: 'Courier New',
-      color: '#88ddff',
-      fontStyle: 'italic'
-    }).setOrigin(0.5).setDepth(15);
+    const subtitle = this.add
+      .text(width / 2, 58, "From Around The World", {
+        fontSize: "12px",
+        fontFamily: "Courier New",
+        color: "#88ddff",
+        fontStyle: "italic",
+      })
+      .setOrigin(0.5)
+      .setDepth(15);
 
     // Subtle pulse animation
     this.tweens.add({
       targets: [titleBg, this.titleText, subtitle],
-      y: '+=2',
+      y: "+=2",
       duration: 2500,
       yoyo: true,
       repeat: -1,
-      ease: 'Sine.inOut'
+      ease: "Sine.inOut",
     });
 
     // Water drop decorations
@@ -131,51 +164,56 @@ export class GameScene extends Phaser.Scene {
 
     this.tweens.add({
       targets: [leftDecor, rightDecor],
-      y: '+=5',
+      y: "+=5",
       duration: 1800,
       yoyo: true,
       repeat: -1,
-      ease: 'Sine.inOut'
+      ease: "Sine.inOut",
     });
   }
 
   createBackButton() {
     const backBtn = this.add.container(80, 40).setDepth(20);
-    
-    const btnBg = this.add.rectangle(0, 0, 140, 50, 0x0a2f4a, 0.95)
+
+    const btnBg = this.add
+      .rectangle(0, 0, 140, 50, 0x0a2f4a, 0.95)
       .setStrokeStyle(3, 0x4499dd)
       .setInteractive({ useHandCursor: true });
-    
-    const btnText = this.add.text(0, 0, "← BACK", {
-      fontSize: '14px',
-      fontFamily: 'Courier New',
-      color: '#66ccff',
-      fontStyle: 'bold'
-    }).setOrigin(0.5);
+
+    const btnText = this.add
+      .text(0, 0, "← BACK", {
+        fontSize: "14px",
+        fontFamily: "Courier New",
+        color: "#66ccff",
+        fontStyle: "bold",
+      })
+      .setOrigin(0.5);
 
     backBtn.add([btnBg, btnText]);
 
-    btnBg.on('pointerdown', () => {
+    btnBg.on("pointerdown", () => {
+      this.clickSound.play();
       this.cameras.main.fade(500, 0, 0, 0);
       this.time.delayedCall(500, () => {
         this.scene.stop();
-        this.scene.start('exploreScene');
+        this.scene.start("exploreScene");
       });
     });
 
-    btnBg.on('pointerover', () => {
+    btnBg.on("pointerover", () => {
       btnBg.setFillStyle(0x1a4d6d, 1);
       this.tweens.add({ targets: backBtn, scale: 1.1, duration: 100 });
     });
 
-    btnBg.on('pointerout', () => {
+    btnBg.on("pointerout", () => {
       btnBg.setFillStyle(0x0a2f4a, 0.95);
       this.tweens.add({ targets: backBtn, scale: 1, duration: 100 });
     });
   }
 
   createFarmerSprite() {
-    this.farmer = this.add.sprite(300, sizes.height - 110, 'pakifarmer')
+    this.farmer = this.add
+      .sprite(300, sizes.height - 110, "pakifarmer")
       .setScale(0.2)
       .setDepth(12)
       .setAlpha(0);
@@ -185,7 +223,7 @@ export class GameScene extends Phaser.Scene {
       targets: this.farmer,
       alpha: 1,
       duration: 1000,
-      ease: 'Power2'
+      ease: "Power2",
     });
 
     // Floating animation
@@ -196,15 +234,15 @@ export class GameScene extends Phaser.Scene {
       duration: 2000,
       yoyo: true,
       repeat: -1,
-      ease: "Sine.inOut"
+      ease: "Sine.inOut",
     });
   }
 
   createDialogBox() {
-    this.dialogContainer = this.add.container(
-      sizes.width / 2 + 100, 
-      sizes.height - 80
-    ).setDepth(10).setAlpha(0);
+    this.dialogContainer = this.add
+      .container(sizes.width / 2 + 100, sizes.height - 80)
+      .setDepth(10)
+      .setAlpha(0);
 
     // Enhanced dialog box with better styling
     const dialogBoxBg = this.add.rectangle(0, 0, 500, 80, 0x0a2f4a, 0.98);
@@ -212,31 +250,38 @@ export class GameScene extends Phaser.Scene {
 
     // Speaker indicator
     const speakerBg = this.add.rectangle(-230, -50, 160, 30, 0x4499dd);
-    const speakerText = this.add.text(-230, -50, "BILAL", {
-      fontFamily: "'Press Start 2P', Courier New",
-      fontSize: "11px",
-      color: "#0a2f4a",
-      fontStyle: "bold"
-    }).setOrigin(0.5);
+    const speakerText = this.add
+      .text(-230, -50, "BILAL", {
+        fontFamily: "'Press Start 2P', Courier New",
+        fontSize: "11px",
+        color: "#0a2f4a",
+        fontStyle: "bold",
+      })
+      .setOrigin(0.5);
 
-    this.dialogText = this.add.text(0, -20, "", {
-    fontFamily: "Courier New",
-    fontSize: "15px",
-    color: "#e0f7ff",
-    wordWrap: { 
-      width: 460, // Reduced from 560 to fit within the 500px box with padding
-      useAdvancedWrap: true 
-    },
-    align: "center",
-    lineSpacing: 6
-  }).setOrigin(0.5);
+    this.dialogText = this.add
+      .text(0, -20, "", {
+        fontFamily: "Courier New",
+        fontSize: "15px",
+        color: "#e0f7ff",
+        wordWrap: {
+          width: 460, // Reduced from 560 to fit within the 500px box with padding
+          useAdvancedWrap: true,
+        },
+        align: "center",
+        lineSpacing: 6,
+      })
+      .setOrigin(0.5);
 
-    this.clickText = this.add.text(0, 55, "▼ CLICK TO CONTINUE ▼", {
-      fontFamily: "'Press Start 2P', Courier New",
-      fontSize: "9px",
-      color: "#66ccff",
-      fontStyle: "bold"
-    }).setOrigin(0.5).setVisible(false);
+    this.clickText = this.add
+      .text(0, 55, "▼ CLICK TO CONTINUE ▼", {
+        fontFamily: "'Press Start 2P', Courier New",
+        fontSize: "9px",
+        color: "#66ccff",
+        fontStyle: "bold",
+      })
+      .setOrigin(0.5)
+      .setVisible(false);
 
     this.tweens.add({
       targets: this.clickText,
@@ -245,15 +290,15 @@ export class GameScene extends Phaser.Scene {
       duration: 700,
       yoyo: true,
       repeat: -1,
-      ease: "Sine.inOut"
+      ease: "Sine.inOut",
     });
 
     this.dialogContainer.add([
-      dialogBoxBg, 
-      speakerBg, 
-      speakerText, 
-      this.dialogText, 
-      this.clickText
+      dialogBoxBg,
+      speakerBg,
+      speakerText,
+      this.dialogText,
+      this.clickText,
     ]);
 
     // Fade in
@@ -261,11 +306,12 @@ export class GameScene extends Phaser.Scene {
       targets: this.dialogContainer,
       alpha: 1,
       duration: 800,
-      ease: 'Power2'
+      ease: "Power2",
     });
 
     dialogBoxBg.setInteractive();
     dialogBoxBg.on("pointerdown", () => {
+      this.clickSound.play();
       if (this.isTyping) {
         this.completeTypewriter();
       } else if (this.clickText.visible) {
@@ -273,11 +319,11 @@ export class GameScene extends Phaser.Scene {
       }
     });
 
-    dialogBoxBg.on('pointerover', () => {
+    dialogBoxBg.on("pointerover", () => {
       dialogBoxBg.setStrokeStyle(4, 0x66ccff);
     });
 
-    dialogBoxBg.on('pointerout', () => {
+    dialogBoxBg.on("pointerout", () => {
       dialogBoxBg.setStrokeStyle(4, 0x4499dd);
     });
 
@@ -288,7 +334,7 @@ export class GameScene extends Phaser.Scene {
       duration: 2000,
       yoyo: true,
       repeat: -1,
-      ease: "Sine.easeInOut"
+      ease: "Sine.easeInOut",
     });
   }
 
@@ -299,8 +345,10 @@ export class GameScene extends Phaser.Scene {
     // Bottom water-themed decorations
     for (let i = 0; i < 10; i++) {
       const x = 40 + i * 20;
-      const wave = this.add.circle(x, height - 35, 5, 0x4499dd, 0.6).setDepth(2);
-      
+      const wave = this.add
+        .circle(x, height - 35, 5, 0x4499dd, 0.6)
+        .setDepth(2);
+
       this.tweens.add({
         targets: wave,
         alpha: 0.3,
@@ -308,10 +356,12 @@ export class GameScene extends Phaser.Scene {
         duration: 1200 + i * 100,
         yoyo: true,
         repeat: -1,
-        ease: 'Sine.inOut'
+        ease: "Sine.inOut",
       });
 
-      const wave2 = this.add.circle(width - x, height - 35, 5, 0x4499dd, 0.6).setDepth(2);
+      const wave2 = this.add
+        .circle(width - x, height - 35, 5, 0x4499dd, 0.6)
+        .setDepth(2);
       this.tweens.add({
         targets: wave2,
         alpha: 0.3,
@@ -319,14 +369,14 @@ export class GameScene extends Phaser.Scene {
         duration: 1200 + i * 100,
         yoyo: true,
         repeat: -1,
-        ease: 'Sine.inOut'
+        ease: "Sine.inOut",
       });
     }
   }
 
   advanceDialog() {
     this.dialogIndex++;
-    
+
     if (this.dialogIndex >= dialogPhases.introduction.length) {
       return;
     }
@@ -338,13 +388,13 @@ export class GameScene extends Phaser.Scene {
     this.currentTypewriterText = text;
     this.dialogText.setText("");
     this.clickText.setVisible(false);
-    
+
     let i = 0;
-    
+
     if (this.typewriterTimer) {
       this.typewriterTimer.remove();
     }
-    
+
     this.typewriterTimer = this.time.addEvent({
       delay: 45,
       callback: () => {
@@ -356,22 +406,22 @@ export class GameScene extends Phaser.Scene {
           this.clickText.setVisible(true);
         }
       },
-      loop: true
+      loop: true,
     });
 
     if (text === "This is Pakistan before and after the 2022 Flood!") {
       this.time.delayedCall(600, () => this.displayRicePictures());
-    } 
+    }
 
     if (text === "Let's look at the crops during the flood...") {
       this.time.delayedCall(600, () => this.displayCrops());
-    } 
+    }
 
     if (text === "Let's play a mini-game to recover crops and soil.") {
       this.cameras.main.fade(800, 0, 0, 0);
       this.time.delayedCall(800, () => {
         this.scene.stop();
-        this.scene.start('scene-flood');
+        this.scene.start("scene-flood");
       });
     }
   }
@@ -385,140 +435,166 @@ export class GameScene extends Phaser.Scene {
     this.clickText.setVisible(true);
   }
 
-displayRicePictures() {
-  this.hideRicePictures();
-  const width = sizes.width;
-  const height = sizes.height;
+  displayRicePictures() {
+    this.hideRicePictures();
+    const width = sizes.width;
+    const height = sizes.height;
 
-  const container = this.add.container(width / 2, height / 2 - 40).setDepth(9).setAlpha(0);
+    const container = this.add
+      .container(width / 2, height / 2 - 40)
+      .setDepth(9)
+      .setAlpha(0);
 
-  // Frame
-  const outerFrame = this.add.rectangle(0, 0, 550, 320, 0x0a2f4a, 0.95);
-  outerFrame.setStrokeStyle(5, 0x4499dd);
+    // Frame
+    const outerFrame = this.add.rectangle(0, 0, 550, 320, 0x0a2f4a, 0.95);
+    outerFrame.setStrokeStyle(5, 0x4499dd);
 
-  const innerFrame = this.add.rectangle(0, 0, 520, 290, 0x1a3d5a);
-  innerFrame.setStrokeStyle(3, 0x66ccff);
+    const innerFrame = this.add.rectangle(0, 0, 520, 290, 0x1a3d5a);
+    innerFrame.setStrokeStyle(3, 0x66ccff);
 
-  // Title
-  const titleBg = this.add.rectangle(0, -130, 280, 45, 0x4499dd);
-  const titleText = this.add.text(0, -130, 'Pakistan 2022 Flood', {
-    fontSize: '16px',
-    fontFamily: "'Press Start 2P', Courier New",
-    color: '#ffffff',
-    fontStyle: 'bold'
-  }).setOrigin(0.5);
+    // Title
+    const titleBg = this.add.rectangle(0, -130, 280, 45, 0x4499dd);
+    const titleText = this.add
+      .text(0, -130, "Pakistan 2022 Flood", {
+        fontSize: "16px",
+        fontFamily: "'Press Start 2P', Courier New",
+        color: "#ffffff",
+        fontStyle: "bold",
+      })
+      .setOrigin(0.5);
 
-  // Image setup
-  const imageWidth = 480;
-  const imageHeight = 240;
+    // Image setup
+    const imageWidth = 480;
+    const imageHeight = 240;
 
-  // Create both images positioned in the same place
-  const beforeImage = this.add.image(0, 10, "pakibef")
-    .setDisplaySize(imageWidth, imageHeight)
-    .setAlpha(1); // Start with before image visible
+    // Create both images positioned in the same place
+    const beforeImage = this.add
+      .image(0, 10, "pakibef")
+      .setDisplaySize(imageWidth, imageHeight)
+      .setAlpha(1); // Start with before image visible
 
-  const afterImage = this.add.image(0, 10, "pakiafter")
-    .setDisplaySize(imageWidth, imageHeight)
-    .setAlpha(0); // Start with after image hidden
+    const afterImage = this.add
+      .image(0, 10, "pakiafter")
+      .setDisplaySize(imageWidth, imageHeight)
+      .setAlpha(0); // Start with after image hidden
 
-  // Simple slider bar
-  const sliderBar = this.add.rectangle(0, 150, 300, 8, 0x666666)
-    .setInteractive({ useHandCursor: true });
-  
-  const sliderHandle = this.add.circle(-150, 150, 12, 0x4499dd)
-    .setStrokeStyle(2, 0xffffff)
-    .setInteractive({ draggable: true, useHandCursor: true });
+    // Simple slider bar
+    const sliderBar = this.add
+      .rectangle(0, 150, 300, 8, 0x666666)
+      .setInteractive({ useHandCursor: true });
 
-  // Labels
-  const beforeLabel = this.add.text(-180, 150, 'BEFORE', {
-    fontSize: '12px',
-    fontFamily: 'Courier New',
-    color: '#66ccff'
-  }).setOrigin(0.5);
+    const sliderHandle = this.add
+      .circle(-150, 150, 12, 0x4499dd)
+      .setStrokeStyle(2, 0xffffff)
+      .setInteractive({ draggable: true, useHandCursor: true });
 
-  const afterLabel = this.add.text(180, 150, 'AFTER', {
-    fontSize: '12px',
-    fontFamily: 'Courier New',
-    color: '#66ccff'
-  }).setOrigin(0.5);
+    // Labels
+    const beforeLabel = this.add
+      .text(-180, 150, "BEFORE", {
+        fontSize: "12px",
+        fontFamily: "Courier New",
+        color: "#66ccff",
+      })
+      .setOrigin(0.5);
 
-  // Slider functionality
-  const onDrag = (pointer, dragX) => {
-    const minX = -150;
-    const maxX = 150;
-    const newX = Phaser.Math.Clamp(dragX, minX, maxX);
-    
-    sliderHandle.x = newX;
-    
-    // Calculate alpha values based on slider position
-    const progress = (newX - minX) / (maxX - minX);
-    beforeImage.setAlpha(1 - progress);
-    afterImage.setAlpha(progress);
-  };
+    const afterLabel = this.add
+      .text(180, 150, "AFTER", {
+        fontSize: "12px",
+        fontFamily: "Courier New",
+        color: "#66ccff",
+      })
+      .setOrigin(0.5);
 
-  sliderHandle.on('drag', onDrag);
+    // Slider functionality
+    const onDrag = (pointer, dragX) => {
+      const minX = -150;
+      const maxX = 150;
+      const newX = Phaser.Math.Clamp(dragX, minX, maxX);
 
-  // Also make the slider bar clickable
-  sliderBar.on('pointerdown', (pointer) => {
-    const localX = pointer.x - (width / 2);
-    onDrag(pointer, localX);
-  });
+      sliderHandle.x = newX;
 
-  container.add([
-    outerFrame, innerFrame, titleBg, titleText, 
-    beforeImage, afterImage, sliderBar, sliderHandle,
-    beforeLabel, afterLabel
-  ]);
+      // Calculate alpha values based on slider position
+      const progress = (newX - minX) / (maxX - minX);
+      beforeImage.setAlpha(1 - progress);
+      afterImage.setAlpha(progress);
+    };
 
-  this.displayedImages = [container];
+    sliderHandle.on("drag", onDrag);
 
-  // Fade in
-  this.tweens.add({
-    targets: container,
-    alpha: 1,
-    scale: { from: 0.9, to: 1 },
-    duration: 600,
-    ease: 'Back.easeOut'
-  });
-}
-hideRicePictures() {
-  if (this.displayedImages.length > 0) {
-    this.displayedImages.forEach(el => {
-      this.tweens.add({
-        targets: el,
-        alpha: 0,
-        scale: 0.9,
-        duration: 400,
-        onComplete: () => el.destroy()
-      });
+    // Also make the slider bar clickable
+    sliderBar.on("pointerdown", (pointer) => {
+      this.clickSound.play();
+      const localX = pointer.x - width / 2;
+      onDrag(pointer, localX);
     });
-    this.displayedImages = [];
+
+    container.add([
+      outerFrame,
+      innerFrame,
+      titleBg,
+      titleText,
+      beforeImage,
+      afterImage,
+      sliderBar,
+      sliderHandle,
+      beforeLabel,
+      afterLabel,
+    ]);
+
+    this.displayedImages = [container];
+
+    // Fade in
+    this.tweens.add({
+      targets: container,
+      alpha: 1,
+      scale: { from: 0.9, to: 1 },
+      duration: 600,
+      ease: "Back.easeOut",
+    });
   }
-  
-  // Clean up mask graphics
-  if (this.currentMaskGraphics) {
-    this.currentMaskGraphics.destroy();
-    this.currentMaskGraphics = null;
+  hideRicePictures() {
+    if (this.displayedImages.length > 0) {
+      this.displayedImages.forEach((el) => {
+        this.tweens.add({
+          targets: el,
+          alpha: 0,
+          scale: 0.9,
+          duration: 400,
+          onComplete: () => el.destroy(),
+        });
+      });
+      this.displayedImages = [];
+    }
+
+    // Clean up mask graphics
+    if (this.currentMaskGraphics) {
+      this.currentMaskGraphics.destroy();
+      this.currentMaskGraphics = null;
+    }
   }
-}
   displayCrops() {
     this.hideCrops();
     const width = sizes.width;
     const height = sizes.height;
 
-    const container = this.add.container(width / 2, height / 2 - 40).setDepth(9).setAlpha(0);
+    const container = this.add
+      .container(width / 2, height / 2 - 40)
+      .setDepth(9)
+      .setAlpha(0);
 
     // Enhanced frame
     const outerFrame = this.add.rectangle(0, 0, 650, 320, 0x0a2f4a, 0.95);
     outerFrame.setStrokeStyle(5, 0x4499dd);
 
     const titleBg = this.add.rectangle(0, -130, 240, 45, 0x4499dd);
-    const titleText = this.add.text(0, -130, 'Flooded Crops', {
-      fontSize: '16px',
-      fontFamily: "'Press Start 2P', Courier New",
-      color: '#ffffff',
-      fontStyle: 'bold'
-    }).setOrigin(0.5);
+    const titleText = this.add
+      .text(0, -130, "Flooded Crops", {
+        fontSize: "16px",
+        fontFamily: "'Press Start 2P', Courier New",
+        color: "#ffffff",
+        fontStyle: "bold",
+      })
+      .setOrigin(0.5);
 
     // Image containers with frames
     const pic1Container = this.add.container(-160, 10);
@@ -533,7 +609,13 @@ hideRicePictures() {
     const pic2 = this.add.image(0, 0, "flood3").setDisplaySize(240, 240);
     pic2Container.add([pic2Frame, pic2]);
 
-    container.add([outerFrame, titleBg, titleText, pic1Container, pic2Container]);
+    container.add([
+      outerFrame,
+      titleBg,
+      titleText,
+      pic1Container,
+      pic2Container,
+    ]);
 
     this.displayedImages = [container];
 
@@ -542,7 +624,7 @@ hideRicePictures() {
       alpha: 1,
       scale: { from: 0.9, to: 1 },
       duration: 600,
-      ease: 'Back.easeOut'
+      ease: "Back.easeOut",
     });
 
     this.tweens.add({
@@ -551,19 +633,19 @@ hideRicePictures() {
       duration: 3000,
       yoyo: true,
       repeat: -1,
-      ease: "Sine.inOut"
+      ease: "Sine.inOut",
     });
   }
 
   hideCrops() {
     if (this.displayedImages.length > 0) {
-      this.displayedImages.forEach(el => {
+      this.displayedImages.forEach((el) => {
         this.tweens.add({
           targets: el,
           alpha: 0,
           scale: 0.9,
           duration: 400,
-          onComplete: () => el.destroy()
+          onComplete: () => el.destroy(),
         });
       });
       this.displayedImages = [];

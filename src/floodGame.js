@@ -1,10 +1,9 @@
-import Phaser from 'phaser';
-
+import Phaser from "phaser";
 
 const dialogPhases = {
   introduction: [
     "Using Nasa's heavy rainfall data, we can predict floods.",
-    "A flood already occured, please help save the crops!"
+    "A flood already occured, please help save the crops!",
   ],
 };
 
@@ -15,25 +14,42 @@ const sizes = {
 
 export default class FloodScene extends Phaser.Scene {
   constructor() {
-    super('scene-flood');
-
+    super("scene-flood");
   }
 
   preload() {
-  this.load.image("bged", "/assets/bgrain.jpg");
+    this.load.image("bged", "/assets/bgrain.jpg");
     this.load.image("farmer", "/assets/farmerr.png");
+
+    // Load click sound
+    this.load.audio("clickSound", "/assets/click.mp3");
+
+    // Load wrong and right soundtrack sounds
+    this.load.audio("wrongSound", "/assets/wrong_soundtrack.mp3");
+    this.load.audio("rightSound", "/assets/right-soundtrack.mp3");
+
+    // No background music loading
   }
 
-   create() {
+  create() {
     const centerX = this.sys.game.config.width / 2;
     const centerY = this.sys.game.config.height / 2;
 
-      this.dialogIndex = 0; 
+    // Initialize click sound
+    this.clickSound = this.sound.add("clickSound", { volume: 0.3 });
+
+    // Initialize wrong and right soundtrack sounds
+    this.wrongSound = this.sound.add("wrongSound", { volume: 0.4 });
+    this.rightSound = this.sound.add("rightSound", { volume: 0.4 });
+
+    // No background music - only click sounds
+
+    this.dialogIndex = 0;
 
     // Enhanced background with overlay
-    this.cameras.main.setBackgroundColor('#0a1f2e');
+    this.cameras.main.setBackgroundColor("#0a1f2e");
     this.createAtmosphericBackground();
-    
+
     this.bg = this.add.image(centerX, centerY, "bged").setOrigin(0.5);
     this.bg.displayWidth = this.sys.game.config.width;
     this.bg.displayHeight = this.sys.game.config.height;
@@ -45,7 +61,7 @@ export default class FloodScene extends Phaser.Scene {
     this.createFarmerSprite();
     this.createDialogBox();
     this.addDecorativeElements();
-    
+
     // Fade in entrance
     this.cameras.main.fadeIn(800, 0, 0, 0);
     this.time.delayedCall(500, () => {
@@ -58,8 +74,10 @@ export default class FloodScene extends Phaser.Scene {
     for (let i = 0; i < 20; i++) {
       const x = Math.random() * this.sys.game.config.width;
       const y = Math.random() * this.sys.game.config.height;
-      const raindrop = this.add.rectangle(x, y, 2, 8, 0x6699cc, 0.3).setDepth(0.3);
-      
+      const raindrop = this.add
+        .rectangle(x, y, 2, 8, 0x6699cc, 0.3)
+        .setDepth(0.3);
+
       this.tweens.add({
         targets: raindrop,
         y: y + 200 + Math.random() * 100,
@@ -67,7 +85,7 @@ export default class FloodScene extends Phaser.Scene {
         duration: 1500 + Math.random() * 1000,
         repeat: -1,
         delay: Math.random() * 2000,
-        ease: 'Linear'
+        ease: "Linear",
       });
     }
   }
@@ -75,32 +93,45 @@ export default class FloodScene extends Phaser.Scene {
   createTitle() {
     const width = this.sys.game.config.width;
 
-    const titleBg = this.add.rectangle(width / 2, 40, width - 60, 70, 0x0a2f4a, 0.95);
+    const titleBg = this.add.rectangle(
+      width / 2,
+      40,
+      width - 60,
+      70,
+      0x0a2f4a,
+      0.95
+    );
     titleBg.setStrokeStyle(4, 0x4499dd);
     titleBg.setDepth(15);
 
-    this.titleText = this.add.text(width / 2, 35, 'Flood Stories', {
-      fontSize: '26px',
-      fontFamily: "'Press Start 2P', Courier New",
-      color: '#66ccff',
-      fontStyle: 'bold'
-    }).setOrigin(0.5).setDepth(15);
+    this.titleText = this.add
+      .text(width / 2, 35, "Flood Stories", {
+        fontSize: "26px",
+        fontFamily: "'Press Start 2P', Courier New",
+        color: "#66ccff",
+        fontStyle: "bold",
+      })
+      .setOrigin(0.5)
+      .setDepth(15);
 
-    const subtitle = this.add.text(width / 2, 58, 'From Around The World', {
-      fontSize: '12px',
-      fontFamily: 'Courier New',
-      color: '#88ddff',
-      fontStyle: 'italic'
-    }).setOrigin(0.5).setDepth(15);
+    const subtitle = this.add
+      .text(width / 2, 58, "From Around The World", {
+        fontSize: "12px",
+        fontFamily: "Courier New",
+        color: "#88ddff",
+        fontStyle: "italic",
+      })
+      .setOrigin(0.5)
+      .setDepth(15);
 
     // Subtle pulse animation
     this.tweens.add({
       targets: [titleBg, this.titleText, subtitle],
-      y: '+=2',
+      y: "+=2",
       duration: 2500,
       yoyo: true,
       repeat: -1,
-      ease: 'Sine.inOut'
+      ease: "Sine.inOut",
     });
 
     // Water drop decorations
@@ -124,51 +155,56 @@ export default class FloodScene extends Phaser.Scene {
 
     this.tweens.add({
       targets: [leftDecor, rightDecor],
-      y: '+=5',
+      y: "+=5",
       duration: 1800,
       yoyo: true,
       repeat: -1,
-      ease: 'Sine.inOut'
+      ease: "Sine.inOut",
     });
   }
 
   createBackButton() {
     const backBtn = this.add.container(80, 40).setDepth(20);
-    
-    const btnBg = this.add.rectangle(0, 0, 140, 50, 0x0a2f4a, 0.95)
+
+    const btnBg = this.add
+      .rectangle(0, 0, 140, 50, 0x0a2f4a, 0.95)
       .setStrokeStyle(3, 0x4499dd)
       .setInteractive({ useHandCursor: true });
-    
-    const btnText = this.add.text(0, 0, "← BACK", {
-      fontSize: '14px',
-      fontFamily: 'Courier New',
-      color: '#66ccff',
-      fontStyle: 'bold'
-    }).setOrigin(0.5);
+
+    const btnText = this.add
+      .text(0, 0, "← BACK", {
+        fontSize: "14px",
+        fontFamily: "Courier New",
+        color: "#66ccff",
+        fontStyle: "bold",
+      })
+      .setOrigin(0.5);
 
     backBtn.add([btnBg, btnText]);
 
-    btnBg.on('pointerdown', () => {
+    btnBg.on("pointerdown", () => {
+      this.clickSound.play();
       this.cameras.main.fade(500, 0, 0, 0);
       this.time.delayedCall(500, () => {
         this.scene.stop();
-        this.scene.start('exploreScene');
+        this.scene.start("exploreScene");
       });
     });
 
-    btnBg.on('pointerover', () => {
+    btnBg.on("pointerover", () => {
       btnBg.setFillStyle(0x1a4d6d, 1);
       this.tweens.add({ targets: backBtn, scale: 1.1, duration: 100 });
     });
 
-    btnBg.on('pointerout', () => {
+    btnBg.on("pointerout", () => {
       btnBg.setFillStyle(0x0a2f4a, 0.95);
       this.tweens.add({ targets: backBtn, scale: 1, duration: 100 });
     });
   }
 
   createFarmerSprite() {
-    this.farmer = this.add.sprite(300, sizes.height - 110, 'farmer')
+    this.farmer = this.add
+      .sprite(300, sizes.height - 110, "farmer")
       .setScale(0.2)
       .setDepth(12)
       .setAlpha(0);
@@ -178,7 +214,7 @@ export default class FloodScene extends Phaser.Scene {
       targets: this.farmer,
       alpha: 1,
       duration: 1000,
-      ease: 'Power2'
+      ease: "Power2",
     });
 
     // Floating animation
@@ -189,15 +225,15 @@ export default class FloodScene extends Phaser.Scene {
       duration: 2000,
       yoyo: true,
       repeat: -1,
-      ease: "Sine.inOut"
+      ease: "Sine.inOut",
     });
   }
 
   createDialogBox() {
-    this.dialogContainer = this.add.container(
-      sizes.width / 2 + 100, 
-      sizes.height - 110
-    ).setDepth(10).setAlpha(0);
+    this.dialogContainer = this.add
+      .container(sizes.width / 2 + 100, sizes.height - 110)
+      .setDepth(10)
+      .setAlpha(0);
 
     // Enhanced dialog box with better styling
     const dialogBoxBg = this.add.rectangle(0, 0, 500, 80, 0x0a2f4a, 0.98);
@@ -205,28 +241,35 @@ export default class FloodScene extends Phaser.Scene {
 
     // Speaker indicator
     const speakerBg = this.add.rectangle(-230, -50, 160, 30, 0x4499dd);
-    const speakerText = this.add.text(-230, -50, "HENRY", {
-      fontFamily: "'Press Start 2P', Courier New",
-      fontSize: "11px",
-      color: "#0a2f4a",
-      fontStyle: "bold"
-    }).setOrigin(0.5);
+    const speakerText = this.add
+      .text(-230, -50, "HENRY", {
+        fontFamily: "'Press Start 2P', Courier New",
+        fontSize: "11px",
+        color: "#0a2f4a",
+        fontStyle: "bold",
+      })
+      .setOrigin(0.5);
 
-    this.dialogText = this.add.text(0, -20, "", {
-      fontFamily: "Courier New",
-      fontSize: "15px",
-      color: "#e0f7ff",
-      wordWrap: { width: 560, useAdvancedWrap: true },
-      align: "center",
-      lineSpacing: 6
-    }).setOrigin(0.5);
+    this.dialogText = this.add
+      .text(0, -20, "", {
+        fontFamily: "Courier New",
+        fontSize: "15px",
+        color: "#e0f7ff",
+        wordWrap: { width: 560, useAdvancedWrap: true },
+        align: "center",
+        lineSpacing: 6,
+      })
+      .setOrigin(0.5);
 
-    this.clickText = this.add.text(0, 55, "▼ CLICK TO CONTINUE ▼", {
-      fontFamily: "'Press Start 2P', Courier New",
-      fontSize: "9px",
-      color: "#66ccff",
-      fontStyle: "bold"
-    }).setOrigin(0.5).setVisible(false);
+    this.clickText = this.add
+      .text(0, 55, "▼ CLICK TO CONTINUE ▼", {
+        fontFamily: "'Press Start 2P', Courier New",
+        fontSize: "9px",
+        color: "#66ccff",
+        fontStyle: "bold",
+      })
+      .setOrigin(0.5)
+      .setVisible(false);
 
     this.tweens.add({
       targets: this.clickText,
@@ -235,15 +278,15 @@ export default class FloodScene extends Phaser.Scene {
       duration: 700,
       yoyo: true,
       repeat: -1,
-      ease: "Sine.inOut"
+      ease: "Sine.inOut",
     });
 
     this.dialogContainer.add([
-      dialogBoxBg, 
-      speakerBg, 
-      speakerText, 
-      this.dialogText, 
-      this.clickText
+      dialogBoxBg,
+      speakerBg,
+      speakerText,
+      this.dialogText,
+      this.clickText,
     ]);
 
     // Fade in
@@ -251,11 +294,12 @@ export default class FloodScene extends Phaser.Scene {
       targets: this.dialogContainer,
       alpha: 1,
       duration: 800,
-      ease: 'Power2'
+      ease: "Power2",
     });
 
     dialogBoxBg.setInteractive();
     dialogBoxBg.on("pointerdown", () => {
+      this.clickSound.play();
       if (this.isTyping) {
         this.completeTypewriter();
       } else if (this.clickText.visible) {
@@ -263,11 +307,11 @@ export default class FloodScene extends Phaser.Scene {
       }
     });
 
-    dialogBoxBg.on('pointerover', () => {
+    dialogBoxBg.on("pointerover", () => {
       dialogBoxBg.setStrokeStyle(4, 0x66ccff);
     });
 
-    dialogBoxBg.on('pointerout', () => {
+    dialogBoxBg.on("pointerout", () => {
       dialogBoxBg.setStrokeStyle(4, 0x4499dd);
     });
 
@@ -278,7 +322,7 @@ export default class FloodScene extends Phaser.Scene {
       duration: 2000,
       yoyo: true,
       repeat: -1,
-      ease: "Sine.easeInOut"
+      ease: "Sine.easeInOut",
     });
   }
 
@@ -289,8 +333,10 @@ export default class FloodScene extends Phaser.Scene {
     // Bottom water-themed decorations
     for (let i = 0; i < 10; i++) {
       const x = 40 + i * 20;
-      const wave = this.add.circle(x, height - 35, 5, 0x4499dd, 0.6).setDepth(2);
-      
+      const wave = this.add
+        .circle(x, height - 35, 5, 0x4499dd, 0.6)
+        .setDepth(2);
+
       this.tweens.add({
         targets: wave,
         alpha: 0.3,
@@ -298,10 +344,12 @@ export default class FloodScene extends Phaser.Scene {
         duration: 1200 + i * 100,
         yoyo: true,
         repeat: -1,
-        ease: 'Sine.inOut'
+        ease: "Sine.inOut",
       });
 
-      const wave2 = this.add.circle(width - x, height - 35, 5, 0x4499dd, 0.6).setDepth(2);
+      const wave2 = this.add
+        .circle(width - x, height - 35, 5, 0x4499dd, 0.6)
+        .setDepth(2);
       this.tweens.add({
         targets: wave2,
         alpha: 0.3,
@@ -309,14 +357,14 @@ export default class FloodScene extends Phaser.Scene {
         duration: 1200 + i * 100,
         yoyo: true,
         repeat: -1,
-        ease: 'Sine.inOut'
+        ease: "Sine.inOut",
       });
     }
   }
 
   advanceDialog() {
     this.dialogIndex++;
-    
+
     if (this.dialogIndex >= dialogPhases.introduction.length) {
       return;
     }
@@ -328,13 +376,13 @@ export default class FloodScene extends Phaser.Scene {
     this.currentTypewriterText = text;
     this.dialogText.setText("");
     this.clickText.setVisible(false);
-    
+
     let i = 0;
-    
+
     if (this.typewriterTimer) {
       this.typewriterTimer.remove();
     }
-    
+
     this.typewriterTimer = this.time.addEvent({
       delay: 45,
       callback: () => {
@@ -346,16 +394,22 @@ export default class FloodScene extends Phaser.Scene {
           this.clickText.setVisible(true);
 
           // Only advance scene when text is fully typed and user clicks
-          this.dialogContainer.list[0].once('pointerdown', () => {
-            if (text === "Using Nasa's heavy rainfall data, we can predict floods.") {
+          this.dialogContainer.list[0].once("pointerdown", () => {
+            this.clickSound.play();
+            if (
+              text ===
+              "Using Nasa's heavy rainfall data, we can predict floods."
+            ) {
               this.cameras.main.fade(800, 0, 0, 0);
               this.time.delayedCall(800, () => {
-                this.scene.start('scene-level1');
+                this.scene.start("scene-level1");
               });
-            } else if (text === "A flood already occured, please help save the crops!") {
+            } else if (
+              text === "A flood already occured, please help save the crops!"
+            ) {
               this.cameras.main.fade(800, 0, 0, 0);
               this.time.delayedCall(800, () => {
-                this.scene.start('scene-level2');
+                this.scene.start("scene-level2");
               });
             } else {
               this.advanceDialog();
@@ -363,9 +417,9 @@ export default class FloodScene extends Phaser.Scene {
           });
         }
       },
-      loop: true
+      loop: true,
     });
-}
+  }
 
   completeTypewriter() {
     if (this.typewriterTimer) {
@@ -375,8 +429,4 @@ export default class FloodScene extends Phaser.Scene {
     this.isTyping = false;
     this.clickText.setVisible(true);
   }
-
-  
-
-
 }
