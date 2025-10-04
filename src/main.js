@@ -1,4 +1,4 @@
-import Phaser from "phaser";
+
 import { GameScene } from "./floodintro.js";
 import introScene from "./intro.js";
 import exploreScene from "./explore.js";
