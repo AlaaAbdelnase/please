@@ -8,20 +8,20 @@ export class Game extends Phaser.Scene {
 
   preload() {
     //load audios
-    this.load.audio("buttonClick", "/assets/click.mp3");
+    this.load.audio("buttonClick", "./assets/click.mp3");
 
     // No background music loading
 
     // Load Egypt images
-    this.load.image("egypt_before", "assets/farm_1984.jpg");
-    this.load.image("egypt_after", "assets/farm_2021.jpg");
-    this.load.image("fala7", "assets/fala7.png");
+    this.load.image("egypt_before", "./assets/farm_1984.jpg");
+    this.load.image("egypt_after", "./assets/farm_2021.jpg");
+    this.load.image("fala7", "./assets/fala7.png");
     // Load farmer spritesheet
-    this.load.spritesheet("farmerMen", "assets/farmerMen.png", {
+    this.load.spritesheet("farmerMen", "./assets/farmerMen.png", {
       frameWidth: 32,
       frameHeight: 32,
     });
-    this.load.spritesheet("fala7", "assets/fala7.png", {
+    this.load.spritesheet("fala7", "./assets/fala7.png", {
       frameWidth: 32,
       frameHeight: 32,
     });

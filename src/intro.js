@@ -27,15 +27,15 @@ export default class introScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image("bg", "/assets/introbg.jpg");
-    this.load.image("farmer", "/assets/farmerr.png");
-    this.load.image("wiltedcrop", "/assets/wiltedcrops.jpg");
+    this.load.image("bg", "./assets/introbg.jpg");
+    this.load.image("farmer", "./assets/farmerr.png");
+    this.load.image("wiltedcrop", "./assets/wiltedcrops.jpg");
 
     // Load click sound
-    this.load.audio("clickSound", "/assets/click.mp3");
+    this.load.audio("clickSound", "./assets/click.mp3");
 
     // Load main background soundtrack
-    this.load.audio("mainSoundtrack", "/assets/sound/main_soundtrack.mp3");
+    this.load.audio("mainSoundtrack", "./assets/sound/main_soundtrack.mp3");
   }
 
   create() {

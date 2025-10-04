@@ -24,23 +24,23 @@ class exploreScene extends Phaser.Scene {
 
   preload() {
     // Load static images for each scene
-    this.load.image("heatmap_icon", "/assets/heat.png");
-    this.load.image("float_icon", "/assets/flood.png");
-    this.load.image("drought_icon", "/assets/drought.png");
-    this.load.image("salinized_icon", "/assets/watering_gif.png");
-    this.load.image("water_icon", "/assets/water.png");
-    this.load.image("animals_icon", "/assets/animal.png");
+    this.load.image("heatmap_icon", "./assets/heat.png");
+    this.load.image("float_icon", "./assets/flood.png");
+    this.load.image("drought_icon", "./assets/drought.png");
+    this.load.image("salinized_icon", "./assets/watering_gif.png");
+    this.load.image("water_icon", "./assets/water.png");
+    this.load.image("animals_icon", "./assets/animal.png");
 
     // Load farmer character
-    this.load.image("farmer", "/assets/farmerr.png");
+    this.load.image("farmer", "./assets/farmerr.png");
 
     // Load video for animals scene
-    this.load.video("animals_video", "/assets/animal_video.mp4");
-    this.load.video("flood_video", "/assets/flood_video.mp4");
-    this.load.video("drought_video", "/assets/drought_video.mp4");
-    this.load.video("salinized_video", "/assets/salt_vid.mp4");
-    this.load.video("water_video", "/assets/water_video.mp4");
-    this.load.video("heatmap_video", "/assets/heat_video.mp4");
+    this.load.video("animals_video", "./assets/animal_video.mp4");
+    this.load.video("flood_video", "./assets/flood_video.mp4");
+    this.load.video("drought_video", "./assets/drought_video.mp4");
+    this.load.video("salinized_video", "./assets/salt_vid.mp4");
+    this.load.video("water_video", "./assets/water_video.mp4");
+    this.load.video("heatmap_video", "./assets/heat_video.mp4");
 
     // No background music loading
 
