@@ -17,9 +17,6 @@ export default class HeatmapScene extends Phaser.Scene {
     // Load your global heatmap
     this.load.image("heatmap", "./assets/alaa's/heatmap.png");
 
-    // Load farmer image
-    this.load.image("farmer", "./assets/farmerr.png");
-
     // Load click sound
     this.load.audio("clickSound", "./assets/click.mp3");
 
@@ -554,22 +551,6 @@ export default class HeatmapScene extends Phaser.Scene {
 
   createStoryText() {
     const { width, height } = this.scale;
-
-    // Add farmer image over the dialogue to the left
-    const farmerOverlay = this.add
-      .image(width / 2 - 350, height - 80, "farmer")
-      .setScale(0.17)
-      .setDepth(15);
-
-    // Add breathing animation to farmer
-    this.tweens.add({
-      targets: farmerOverlay,
-      scaleX: 0.19,
-      scaleY: 0.19,
-      duration: 1500,
-      yoyo: true,
-      repeat: -1,
-    });
 
     // Story background box
     const storyBg = this.add.rectangle(
