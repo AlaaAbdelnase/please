@@ -1,4 +1,4 @@
-import Phaser from "phaser";
+
 
 export default class HeatmapScene extends Phaser.Scene {
   constructor() {
