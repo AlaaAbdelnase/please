@@ -1,4 +1,4 @@
-import Phaser from "phaser";
+
 
 const sizes = {
   width: window.innerWidth,
