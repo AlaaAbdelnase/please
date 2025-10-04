@@ -17,6 +17,9 @@ export default class HeatmapScene extends Phaser.Scene {
     // Load your global heatmap
     this.load.image("heatmap", "./assets/alaa's/heatmap.png");
 
+    // Load farmer image
+    this.load.image("farmer", "./assets/farmerr.png");
+
     // Load click sound
     this.load.audio("clickSound", "./assets/click.mp3");
 
