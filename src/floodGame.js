@@ -1,4 +1,4 @@
-import Phaser from "phaser";
+
 
 const dialogPhases = {
   introduction: [
