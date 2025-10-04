@@ -21,14 +21,10 @@ export default class Level1Scene extends Phaser.Scene {
     this.load.image("farm", "./assets/farmflood.jpg");
     this.load.image("farmer", "./assets/farmerr.png");
     this.load.image("straw", "./assets/straw.png");
-    // Load arrow keys assets (you can replace these with actual arrow images if available)
-    this.load.image("arrowUp", "./assets/arrow_up.png"); // Add your arrow images
-    this.load.image("arrowDown", "./assets/arrow_down.png");
-    this.load.image("arrowLeft", "./assets/arrow_left.png");
-    this.load.image("arrowRight", "./assets/arrow_right.png");
+    // Arrow images removed - files don't exist
 
     // Load the JSON rain grid
-    this.load.json("rainGrid", "/raingrid.json");
+    this.load.json("rainGrid", "./raingrid.json");
 
     // Load click sound
     this.load.audio("clickSound", "./assets/click.mp3");
