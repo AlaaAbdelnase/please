@@ -425,10 +425,14 @@ export class DroughtScene extends Phaser.Scene {
         duration: 500,
         ease: "Power2",
         onComplete: () => {
-          this.mapImage.destroy();
-          this.mapBorder.destroy();
-          this.mapImage = null;
-          this.mapBorder = null;
+          if (this.mapImage) {
+            this.mapImage.destroy();
+            this.mapImage = null;
+          }
+          if (this.mapBorder) {
+            this.mapBorder.destroy();
+            this.mapBorder = null;
+          }
         },
       });
     }

@@ -43,16 +43,6 @@ class exploreScene extends Phaser.Scene {
     this.load.video("heatmap_video", "./assets/heat_video.mp4");
 
     // No background music loading
-
-    this.anims.create({
-      key: "salty_wheat_wave",
-      frames: this.anims.generateFrameNumbers("salty_wheat_anim", {
-        start: 0,
-        end: 7,
-      }), // adjust frames
-      frameRate: 8,
-      repeat: -1,
-    });
   }
 
   create() {

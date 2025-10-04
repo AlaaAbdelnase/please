@@ -21,7 +21,7 @@ export class Game extends Phaser.Scene {
       frameWidth: 32,
       frameHeight: 32,
     });
-    this.load.spritesheet("fala7", "./assets/fala7.png", {
+    this.load.spritesheet("fala7_spritesheet", "./assets/fala7.png", {
       frameWidth: 32,
       frameHeight: 32,
     });
@@ -392,12 +392,12 @@ export class Game extends Phaser.Scene {
   createFarmer() {
     const { width, height } = this.scale;
 
-    // Create farmer animations
+    // Create farmer animations - use only frame 0 since spritesheet might be single frame
     this.anims.create({
       key: "walk",
       frames: this.anims.generateFrameNumbers("farmerMen", {
         start: 0,
-        end: 3,
+        end: 0,
       }),
       frameRate: 8,
       repeat: -1,

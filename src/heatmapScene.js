@@ -42,15 +42,22 @@ export default class HeatmapScene extends Phaser.Scene {
     // Load world map base (you might need to add this)
     // this.load.image("worldmap", "/assets/world_map.png");
 
-    // Create hotspot markers
+    // Create hotspot markers - use simple colored circle
     this.load.image(
       "hotspot-marker",
-      "data:image/svg+xml;base64," + btoa(this.createHotspotMarkerSVG())
+      "data:image/svg+xml;base64," +
+        btoa(
+          '<svg width="50" height="50" xmlns="http://www.w3.org/2000/svg"><circle cx="25" cy="25" r="20" fill="#ff4444" opacity="0.8"/></svg>'
+        )
     );
 
     // Debug loading
     this.load.on("filecomplete-image-heatmap", () => {
       console.log("✅ Heatmap loaded successfully");
+    });
+
+    this.load.on("filecomplete-image-hotspot-marker", () => {
+      console.log("✅ Hotspot marker loaded successfully");
     });
 
     this.load.on("loaderror", (file) => {
@@ -1147,7 +1154,7 @@ export default class HeatmapScene extends Phaser.Scene {
   update() {
     // Update tooltip position based on mouse
     this.input.on("pointermove", (pointer) => {
-      if (this.tooltipEl.style.display === "block") {
+      if (this.tooltipEl && this.tooltipEl.style.display === "block") {
         this.tooltipEl.style.left = pointer.x + 10 + "px";
         this.tooltipEl.style.top = pointer.y - 10 + "px";
       }

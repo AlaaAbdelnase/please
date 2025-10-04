@@ -9,7 +9,11 @@ const sizes = {
 window.addEventListener("resize", () => {
   sizes.width = window.innerWidth;
   sizes.height = window.innerHeight;
-  game.scale.resize(sizes.width, sizes.height);
+  // Get game instance from the canvas
+  const gameInstance = gameCanvas.__phaserGame;
+  if (gameInstance) {
+    gameInstance.scale.resize(sizes.width, sizes.height);
+  }
   gameCanvas.width = sizes.width;
   gameCanvas.height = sizes.height;
 });
