@@ -1,4 +1,4 @@
-import Phaser from "phaser";
+
 
 export default class WaterGame extends Phaser.Scene {
   constructor() {
