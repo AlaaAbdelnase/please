@@ -1,4 +1,4 @@
-import Phaser from "phaser";
+
 
 // Enhanced dialog content with clearer instructions
 const dialogPhases = {
