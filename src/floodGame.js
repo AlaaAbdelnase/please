@@ -18,15 +18,15 @@ export default class FloodScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image("bged", "/assets/bgrain.jpg");
-    this.load.image("farmer", "/assets/farmerr.png");
+    this.load.image("bged", "./assets/bgrain.jpg");
+    this.load.image("farmer", "./assets/farmerr.png");
 
     // Load click sound
-    this.load.audio("clickSound", "/assets/click.mp3");
+    this.load.audio("clickSound", "./assets/click.mp3");
 
     // Load wrong and right soundtrack sounds
-    this.load.audio("wrongSound", "/assets/wrong_soundtrack.mp3");
-    this.load.audio("rightSound", "/assets/right-soundtrack.mp3");
+    this.load.audio("wrongSound", "./assets/wrong_soundtrack.mp3");
+    this.load.audio("rightSound", "./assets/right-soundtrack.mp3");
 
     // No background music loading
   }

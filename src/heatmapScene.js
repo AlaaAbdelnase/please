@@ -15,18 +15,18 @@ export default class HeatmapScene extends Phaser.Scene {
     console.log("Expected server: http://localhost:5173/");
 
     // Load your global heatmap
-    this.load.image("heatmap", "/assets/alaa's/heatmap.png");
+    this.load.image("heatmap", "./assets/alaa's/heatmap.png");
 
     // Load farmer image - use regular farmer for now since indian_farmer.png has issues
-    this.load.image("farmer", "/assets/indian_farmer.png");
-    this.load.image("indian_farmer", "/assets/indian_farmer.png");
+    this.load.image("farmer", "./assets/indian_farmer.png");
+    this.load.image("indian_farmer", "./assets/indian_farmer.png");
 
     // Load click sound
-    this.load.audio("clickSound", "/assets/click.mp3");
+    this.load.audio("clickSound", "./assets/click.mp3");
 
     // Load wrong and right soundtrack sounds
-    this.load.audio("wrongSound", "/assets/wrong_soundtrack.mp3");
-    this.load.audio("rightSound", "/assets/right-soundtrack.mp3");
+    this.load.audio("wrongSound", "./assets/wrong_soundtrack.mp3");
+    this.load.audio("rightSound", "./assets/right-soundtrack.mp3");
 
     // No background music loading
 
@@ -1282,15 +1282,15 @@ export default class HeatmapScene extends Phaser.Scene {
     let title = "";
     switch (videoType) {
       case "mulching":
-        videoSrc = "/assets/alaa's/mulching_video.mp4";
+        videoSrc = "./assets/alaa's/mulching_video.mp4";
         title = "Mulching Techniques";
         break;
       case "drip":
-        videoSrc = "/assets/alaa's/drip_video.mp4";
+        videoSrc = "./assets/alaa's/drip_video.mp4";
         title = "Drip Irrigation System";
         break;
       case "shadenet":
-        videoSrc = "/assets/alaa's/fieldnet_video.mp4";
+        videoSrc = "./assets/alaa's/fieldnet_video.mp4";
         title = "Shade Net Installation";
         break;
     }
@@ -1493,7 +1493,7 @@ export default class HeatmapScene extends Phaser.Scene {
   createInteractiveMap(container) {
     // Create a large heatmap image
     const mapImg = document.createElement("img");
-    mapImg.src = "/assets/alaa's/heatmap.png";
+    mapImg.src = "./assets/alaa's/heatmap.png";
     mapImg.style.cssText = `
       max-width: 100%;
       max-height: 100%;

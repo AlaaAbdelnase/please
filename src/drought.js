@@ -26,18 +26,18 @@ export class DroughtScene extends Phaser.Scene {
 
   preload() {
     this.load.image("dbg", "./assets/droughtbg.jpeg");
-    this.load.image("map", "/assets/map.jpeg");
+    this.load.image("map", "./assets/map.jpeg");
     this.load.image("Sam", "assets/sam2.png", {
       frameWidth: 64,
       frameHeight: 64,
     });
 
     // Load click sound
-    this.load.audio("clickSound", "/assets/click.mp3");
+    this.load.audio("clickSound", "./assets/click.mp3");
 
     // Load wrong and right soundtrack sounds
-    this.load.audio("wrongSound", "/assets/wrong_soundtrack.mp3");
-    this.load.audio("rightSound", "/assets/right-soundtrack.mp3");
+    this.load.audio("wrongSound", "./assets/wrong_soundtrack.mp3");
+    this.load.audio("rightSound", "./assets/right-soundtrack.mp3");
 
     // No background music loading
   }
@@ -629,11 +629,11 @@ export class PlayScene extends Phaser.Scene {
     });
 
     // Load click sound
-    this.load.audio("clickSound", "/assets/click.mp3");
+    this.load.audio("clickSound", "./assets/click.mp3");
 
     // Load wrong and right soundtrack sounds
-    this.load.audio("wrongSound", "/assets/wrong_soundtrack.mp3");
-    this.load.audio("rightSound", "/assets/right-soundtrack.mp3");
+    this.load.audio("wrongSound", "./assets/wrong_soundtrack.mp3");
+    this.load.audio("rightSound", "./assets/right-soundtrack.mp3");
 
     // No background music loading
   }
@@ -1160,11 +1160,11 @@ export class ResultScene extends Phaser.Scene {
     this.load.image("dbg", "./assets/droughtbg.jpeg");
 
     // Load click sound
-    this.load.audio("clickSound", "/assets/click.mp3");
+    this.load.audio("clickSound", "./assets/click.mp3");
 
     // Load wrong and right soundtrack sounds
-    this.load.audio("wrongSound", "/assets/wrong_soundtrack.mp3");
-    this.load.audio("rightSound", "/assets/right-soundtrack.mp3");
+    this.load.audio("wrongSound", "./assets/wrong_soundtrack.mp3");
+    this.load.audio("rightSound", "./assets/right-soundtrack.mp3");
 
     // No background music loading
   }

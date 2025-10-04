@@ -17,20 +17,20 @@ export default class Level2Scene extends Phaser.Scene {
 
   preload() {
     // Farm background & assets - using flooded version
-    this.load.image("bged", "/assets/bgrain.jpg");
-    this.load.image("farm", "/assets/farmflooded.jpg"); // Different flooded background
-    this.load.image("farmer", "/assets/farmerr.png");
-    this.load.image("pipe", "/assets/pipe.png"); // New drainage pipe asset
+    this.load.image("bged", "./assets/bgrain.jpg");
+    this.load.image("farm", "./assets/farmflooded.jpg"); // Different flooded background
+    this.load.image("farmer", "./assets/farmerr.png");
+    this.load.image("pipe", "./assets/pipe.png"); // New drainage pipe asset
 
     // Load the JSON flood grid (could be same as rain grid or different)
     this.load.json("floodGrid", "/floodgrid.json");
 
     // Load click sound
-    this.load.audio("clickSound", "/assets/click.mp3");
+    this.load.audio("clickSound", "./assets/click.mp3");
 
     // Load wrong and right soundtrack sounds
-    this.load.audio("wrongSound", "/assets/wrong_soundtrack.mp3");
-    this.load.audio("rightSound", "/assets/right-soundtrack.mp3");
+    this.load.audio("wrongSound", "./assets/wrong_soundtrack.mp3");
+    this.load.audio("rightSound", "./assets/right-soundtrack.mp3");
 
     // No background music loading
   }

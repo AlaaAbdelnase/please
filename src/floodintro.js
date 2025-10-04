@@ -33,11 +33,11 @@ export class GameScene extends Phaser.Scene {
     this.load.image("pakifarmer", "assets/pakifarmer.png");
 
     // Load click sound
-    this.load.audio("clickSound", "/assets/click.mp3");
+    this.load.audio("clickSound", "./assets/click.mp3");
 
     // Load wrong and right soundtrack sounds
-    this.load.audio("wrongSound", "/assets/wrong_soundtrack.mp3");
-    this.load.audio("rightSound", "/assets/right-soundtrack.mp3");
+    this.load.audio("wrongSound", "./assets/wrong_soundtrack.mp3");
+    this.load.audio("rightSound", "./assets/right-soundtrack.mp3");
 
     // No background music loading
   }

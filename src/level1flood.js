@@ -17,25 +17,25 @@ export default class Level1Scene extends Phaser.Scene {
 
   preload() {
     // Farm background & assets
-    this.load.image("bged", "/assets/bgrain.jpg");
-    this.load.image("farm", "/assets/farmflood.jpg");
-    this.load.image("farmer", "/assets/farmerr.png");
-    this.load.image("straw", "/assets/straw.png");
+    this.load.image("bged", "./assets/bgrain.jpg");
+    this.load.image("farm", "./assets/farmflood.jpg");
+    this.load.image("farmer", "./assets/farmerr.png");
+    this.load.image("straw", "./assets/straw.png");
     // Load arrow keys assets (you can replace these with actual arrow images if available)
-    this.load.image("arrowUp", "/assets/arrow_up.png"); // Add your arrow images
-    this.load.image("arrowDown", "/assets/arrow_down.png");
-    this.load.image("arrowLeft", "/assets/arrow_left.png");
-    this.load.image("arrowRight", "/assets/arrow_right.png");
+    this.load.image("arrowUp", "./assets/arrow_up.png"); // Add your arrow images
+    this.load.image("arrowDown", "./assets/arrow_down.png");
+    this.load.image("arrowLeft", "./assets/arrow_left.png");
+    this.load.image("arrowRight", "./assets/arrow_right.png");
 
     // Load the JSON rain grid
     this.load.json("rainGrid", "/raingrid.json");
 
     // Load click sound
-    this.load.audio("clickSound", "/assets/click.mp3");
+    this.load.audio("clickSound", "./assets/click.mp3");
 
     // Load wrong and right soundtrack sounds
-    this.load.audio("wrongSound", "/assets/wrong_soundtrack.mp3");
-    this.load.audio("rightSound", "/assets/right-soundtrack.mp3");
+    this.load.audio("wrongSound", "./assets/wrong_soundtrack.mp3");
+    this.load.audio("rightSound", "./assets/right-soundtrack.mp3");
 
     // No background music loading
   }

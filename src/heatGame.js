@@ -28,41 +28,41 @@ export default class heatGameScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image("hot_field", "/assets/alaa's/hot_field.jpg");
+    this.load.image("hot_field", "./assets/alaa's/hot_field.jpg");
 
     // Load all sprite sheets in preload
-    this.load.spritesheet("wheat", "/assets/alaa's/wheat.png", {
+    this.load.spritesheet("wheat", "./assets/alaa's/wheat.png", {
       frameWidth: 384,
       frameHeight: 1024,
     });
 
-    this.load.spritesheet("wheat_sink", "/assets/alaa's/wheat_sink.png", {
+    this.load.spritesheet("wheat_sink", "./assets/alaa's/wheat_sink.png", {
       frameWidth: 384,
       frameHeight: 1024,
     });
 
-    this.load.spritesheet("wheat_burn", "/assets/alaa's/wheat_burn.png", {
+    this.load.spritesheet("wheat_burn", "./assets/alaa's/wheat_burn.png", {
       frameWidth: 384,
       frameHeight: 1024,
     });
-    this.load.spritesheet("wheat_dry", "/assets/alaa's/wheat_dry.png", {
+    this.load.spritesheet("wheat_dry", "./assets/alaa's/wheat_dry.png", {
       frameWidth: 384,
       frameHeight: 1024,
     });
 
-    this.load.image("mulch_icon", "/assets/alaa's/mulching.png");
-    this.load.image("dry_icon", "/assets/alaa's/breathe.png");
-    this.load.image("sink_icon", "/assets/alaa's/over_watering.png");
+    this.load.image("mulch_icon", "./assets/alaa's/mulching.png");
+    this.load.image("dry_icon", "./assets/alaa's/breathe.png");
+    this.load.image("sink_icon", "./assets/alaa's/over_watering.png");
 
-    this.load.image("burn_icon", "/assets/alaa's/burning.png");
-    this.load.image("indian_farmer", "/assets/alaa's/indian_farmer.png");
+    this.load.image("burn_icon", "./assets/alaa's/burning.png");
+    this.load.image("indian_farmer", "./assets/alaa's/indian_farmer.png");
 
     // Load click sound
-    this.load.audio("clickSound", "/assets/click.mp3");
+    this.load.audio("clickSound", "./assets/click.mp3");
 
     // Load wrong and right soundtrack sounds
-    this.load.audio("wrongSound", "/assets/wrong_soundtrack.mp3");
-    this.load.audio("rightSound", "/assets/right-soundtrack.mp3");
+    this.load.audio("wrongSound", "./assets/wrong_soundtrack.mp3");
+    this.load.audio("rightSound", "./assets/right-soundtrack.mp3");
 
     // No background music loading
   }

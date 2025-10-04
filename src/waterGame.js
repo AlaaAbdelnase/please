@@ -28,25 +28,25 @@ export default class WaterGame extends Phaser.Scene {
     // Load Brazil statistics image
     this.load.image(
       "brazil_statistics",
-      "/assets/alaa's/brazil_statistics.png"
+      "./assets/alaa's/brazil_statistics.png"
     );
 
     // Load first row images (situations)
-    this.load.image("nothing", "/assets/alaa's/noco2_noadap.png");
-    this.load.image("lvl1", "/assets/alaa's/co2_lvl1.png");
-    this.load.image("lvl2", "/assets/alaa's/co2_lvl2.png");
+    this.load.image("nothing", "./assets/alaa's/noco2_noadap.png");
+    this.load.image("lvl1", "./assets/alaa's/co2_lvl1.png");
+    this.load.image("lvl2", "./assets/alaa's/co2_lvl2.png");
 
     // Load second row images (crops) - using existing working images
-    this.load.image("rice", "/assets/alaa's/rice.png");
-    this.load.image("corn", "/assets/alaa's/corn.png");
-    this.load.image("soybean", "/assets/alaa's/soybean.png");
+    this.load.image("rice", "./assets/alaa's/rice.png");
+    this.load.image("corn", "./assets/alaa's/corn.png");
+    this.load.image("soybean", "./assets/alaa's/soybean.png");
 
     // Load click sound
-    this.load.audio("clickSound", "/assets/click.mp3");
+    this.load.audio("clickSound", "./assets/click.mp3");
 
     // Load wrong and right soundtrack sounds
-    this.load.audio("wrongSound", "/assets/wrong_soundtrack.mp3");
-    this.load.audio("rightSound", "/assets/right-soundtrack.mp3");
+    this.load.audio("wrongSound", "./assets/wrong_soundtrack.mp3");
+    this.load.audio("rightSound", "./assets/right-soundtrack.mp3");
 
     // No background music loading
   }

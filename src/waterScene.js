@@ -37,25 +37,25 @@ export default class WaterScene extends Phaser.Scene {
 
   preload() {
     // Load images for tutorials
-    this.load.image("co2", "/assets/alaa's/co2.png");
-    this.load.image("adaption", "/assets/alaa's/adaption.png");
-    this.load.image("ai", "/assets/alaa's/ai.png");
-    this.load.image("produce_co2", "/assets/alaa's/produce_co2.png");
-    this.load.image("air_co2", "/assets/alaa's/air_co2.png");
-    this.load.image("pumping_co2", "/assets/alaa's/pumping_co2.png");
-    this.load.image("no_adaption", "/assets/alaa's/no_adaption.png");
-    this.load.image("level1", "/assets/alaa's/level1.png");
-    this.load.image("level2", "/assets/alaa's/level2.png");
+    this.load.image("co2", "./assets/alaa's/co2.png");
+    this.load.image("adaption", "./assets/alaa's/adaption.png");
+    this.load.image("ai", "./assets/alaa's/ai.png");
+    this.load.image("produce_co2", "./assets/alaa's/produce_co2.png");
+    this.load.image("air_co2", "./assets/alaa's/air_co2.png");
+    this.load.image("pumping_co2", "./assets/alaa's/pumping_co2.png");
+    this.load.image("no_adaption", "./assets/alaa's/no_adaption.png");
+    this.load.image("level1", "./assets/alaa's/level1.png");
+    this.load.image("level2", "./assets/alaa's/level2.png");
 
     // Load Brazilian farmer image
-    this.load.image("brazilian_farmer", "/assets/brazilian_farmer.png");
+    this.load.image("brazilian_farmer", "./assets/brazilian_farmer.png");
 
     // Load click sound
-    this.load.audio("clickSound", "/assets/click.mp3");
+    this.load.audio("clickSound", "./assets/click.mp3");
 
     // Load wrong and right soundtrack sounds
-    this.load.audio("wrongSound", "/assets/wrong_soundtrack.mp3");
-    this.load.audio("rightSound", "/assets/right-soundtrack.mp3");
+    this.load.audio("wrongSound", "./assets/wrong_soundtrack.mp3");
+    this.load.audio("rightSound", "./assets/right-soundtrack.mp3");
 
     // No background music loading
   }
@@ -473,8 +473,8 @@ export default class WaterScene extends Phaser.Scene {
     // Use João (Brazilian farmer) for both CO₂ and Adaptation tutorials
     farmerImg.src =
       title === "CO2 for Plants" || title === "Adapting Levels"
-        ? "/assets/brazilian_farmer.png"
-        : "/assets/farmerr.png";
+        ? "./assets/brazilian_farmer.png"
+        : "./assets/farmerr.png";
     farmerImg.className = "adaptation-farmer";
     farmerImg.style.cssText = `
       width: ${
@@ -1080,7 +1080,7 @@ export default class WaterScene extends Phaser.Scene {
 
     // Farmer image - positioned next to Brazilian farmer in left section
     const farmerImg = document.createElement("img");
-    farmerImg.src = "/assets/farmerr.png";
+    farmerImg.src = "./assets/farmerr.png";
     farmerImg.style.cssText = `
       width: 200px;
       height: 200px;
@@ -1094,7 +1094,7 @@ export default class WaterScene extends Phaser.Scene {
 
     // Brazilian farmer image - big and floating in left section
     const brazilianFarmerImg = document.createElement("img");
-    brazilianFarmerImg.src = "/assets/brazilian_farmer.png";
+    brazilianFarmerImg.src = "./assets/brazilian_farmer.png";
     brazilianFarmerImg.style.cssText = `
       width: 300px;
       height: 300px;
