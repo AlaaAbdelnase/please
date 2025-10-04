@@ -24,7 +24,7 @@
       canvas {
         display: block;
         margin: 0 auto;
-        cursor: pointer; /* Shows it's clickable */
+        cursor: pointer;
       }
     </style>
   </head>
@@ -36,15 +36,11 @@
           <h1 id="questionTitle" class="ui-title">
             India 2021 - April Heatwave Crisis!
           </h1>
-
           <ul id="answersList" class="answers-list"></ul>
-
           <p id="questionSubtitle" class="ui-subtitle">
             Which method is BEST to keep soil cool and conserve moisture?
           </p>
-
           <div id="feedback" class="feedback" hidden></div>
-
           <div class="controls">
             <button id="tryAgainBtn" class="btn btn-danger" hidden>
               Try Again
@@ -58,6 +54,11 @@
     </main>
 
     <canvas id="gameCanvas"></canvas>
-    <script type="module" src="./src/main.js"></script>
+
+    <!-- ✅ Load Phaser from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3/dist/phaser.js"></script>
+
+    <!-- ✅ Load your game code (make sure this file exists in root) -->
+    <script src="./main.js"></script>
   </body>
 </html>
