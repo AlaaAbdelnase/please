@@ -59,7 +59,6 @@ export default class heatGameScene extends Phaser.Scene {
     this.load.image("sink_icon", "./assets/alaa's/over_watering.png");
 
     this.load.image("burn_icon", "./assets/alaa's/burning.png");
-    this.load.image("indian_farmer", "./assets/alaa's/indian_farmer.png");
 
     // Load click sound
     this.load.audio("clickSound", "./assets/click.mp3");

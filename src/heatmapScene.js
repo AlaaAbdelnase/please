@@ -17,10 +17,6 @@ export default class HeatmapScene extends Phaser.Scene {
     // Load your global heatmap
     this.load.image("heatmap", "./assets/alaa's/heatmap.png");
 
-    // Load farmer image - use regular farmer for now since indian_farmer.png has issues
-    this.load.image("farmer", "./assets/indian_farmer.png");
-    this.load.image("indian_farmer", "./assets/indian_farmer.png");
-
     // Load click sound
     this.load.audio("clickSound", "./assets/click.mp3");
 
@@ -31,13 +27,6 @@ export default class HeatmapScene extends Phaser.Scene {
     // No background music loading
 
     // Debug loading
-    this.load.on("filecomplete-image-indian_farmer", () => {
-      console.log("✅ Indian farmer loaded successfully");
-    });
-
-    this.load.on("loaderror", (file) => {
-      console.error("❌ Failed to load:", file.key, "from path:", file.url);
-    });
 
     // Load world map base (you might need to add this)
     // this.load.image("worldmap", "/assets/world_map.png");
@@ -563,15 +552,15 @@ export default class HeatmapScene extends Phaser.Scene {
   createStoryText() {
     const { width, height } = this.scale;
 
-    // Add Indian farmer image over the dialogue to the left
-    const indianFarmer = this.add
-      .image(width / 2 - 350, height - 80, "indian_farmer")
+    // Add farmer image over the dialogue to the left
+    const farmerOverlay = this.add
+      .image(width / 2 - 350, height - 80, "farmer")
       .setScale(0.17)
       .setDepth(15);
 
-    // Add breathing animation to Indian farmer
+    // Add breathing animation to farmer
     this.tweens.add({
-      targets: indianFarmer,
+      targets: farmerOverlay,
       scaleX: 0.19,
       scaleY: 0.19,
       duration: 1500,
