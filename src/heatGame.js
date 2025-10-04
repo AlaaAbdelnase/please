@@ -1,4 +1,4 @@
-import Phaser from "phaser";
+
 import HeatmapScene from "./heatmapScene.js";
 
 const sizes = {
